@@ -13,11 +13,26 @@ import {
   FaCog,
   FaPowerOff,
 } from "react-icons/fa";
+import { getAuth, signOut } from "firebase/auth";
 
 function NavigationBar() {
   const { collapseSidebar } = useProSidebar();
 
   const [collapsed, setCollapsed] = useState(false);
+
+  /**
+   * Logs the user out
+   */
+  function Logout() {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        console.log("Signout successful");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <div className="App">
@@ -84,7 +99,11 @@ function NavigationBar() {
           <MenuItem icon={<FaCog size={"25px"} />} className="menu-item">
             Settings
           </MenuItem>
-          <MenuItem icon={<FaPowerOff size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaPowerOff size={"25px"} />}
+            className="menu-item"
+            onClick={Logout}
+          >
             Logout
           </MenuItem>
         </Menu>

@@ -34,6 +34,8 @@ function App() {
   //Is the user currently logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [currentUser, setCurrentUser] = useState();
+
   //Using useEffect to check if the user is logged in
   useEffect(() => {
     //Checks if current user is logged in
@@ -43,13 +45,23 @@ function App() {
       //User is logged in
       if (user) {
         //Checks if user is in Firestore database
-        utilities.getUser(user.uid).then((userExists) => {
+        utilities.doesUserExist(user.uid).then((userExists) => {
           //If user is not in database
           if (!userExists) {
             //Adds user to Firestore database
             utilities.addUser(user.uid, user.displayName);
           }
         });
+
+        const unsub = onSnapshot(
+          doc(getFirestore(), "users", auth.currentUser.uid),
+          () => {
+            utilities.getUser(user.uid).then((user) => {
+              setCurrentUser(user);
+              console.log("ran");
+            });
+          }
+        );
 
         //User is logged in
         setIsLoggedIn(true);
@@ -63,7 +75,7 @@ function App() {
   if (isLoggedIn) {
     return (
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard user={currentUser} />} />
         <Route path="/bandchat" element={<BandChat />} />
         <Route path="/events" element={<Events />} />
         <Route path="/finances" element={<Finances />} />
