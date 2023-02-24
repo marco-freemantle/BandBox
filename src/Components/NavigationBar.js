@@ -14,6 +14,7 @@ import {
   FaPowerOff,
 } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
+import { Link } from "react-router-dom";
 
 function NavigationBar() {
   const { collapseSidebar } = useProSidebar();
@@ -67,31 +68,53 @@ function NavigationBar() {
             </button>
           </div>
 
-          <MenuItem icon={<FaHome size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaHome size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/" />}
+          >
             Dashboard
           </MenuItem>
-          <MenuItem icon={<FaEnvelope size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaEnvelope size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/bandchat" />}
+          >
             Band Chat
           </MenuItem>
           <MenuItem
             icon={<FaClipboardCheck size={"25px"} />}
             className="menu-item"
+            component={<Link to="/tasks" />}
           >
             Tasks
           </MenuItem>
           <MenuItem
             icon={<FaCalendarAlt size={"25px"} />}
             className="menu-item"
+            component={<Link to="/events" />}
           >
             Events
           </MenuItem>
-          <MenuItem icon={<FaChartLine size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaChartLine size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/finances" />}
+          >
             Finances
           </MenuItem>
-          <MenuItem icon={<FaListOl size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaListOl size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/setlists" />}
+          >
             Set Lists
           </MenuItem>
-          <MenuItem icon={<FaUsers size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaUsers size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/members" />}
+          >
             Members
           </MenuItem>
 

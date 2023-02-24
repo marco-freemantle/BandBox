@@ -9,7 +9,7 @@ import * as utilities from "./Utilities/FireStoreUtilities";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import BandChat from "./Pages/BandChat/BandChat";
 import Events from "./Pages/Events/Events";
-import Finances from "./Pages/Finances/Finances";
+import Finance from "./Pages/Finances/Finance";
 import Login from "./Pages/Login/Login";
 import Members from "./Pages/Members/Members";
 import SetLists from "./Pages/SetLists/SetLists";
@@ -35,6 +35,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [currentUser, setCurrentUser] = useState();
+  const [currentBand, setCurrentBand] = useState();
 
   //Using useEffect to check if the user is logged in
   useEffect(() => {
@@ -53,15 +54,18 @@ function App() {
           }
         });
 
-        const unsub = onSnapshot(
-          doc(getFirestore(), "users", auth.currentUser.uid),
-          () => {
-            utilities.getUser(user.uid).then((user) => {
-              setCurrentUser(user);
-              console.log("ran");
-            });
-          }
-        );
+        onSnapshot(doc(getFirestore(), "users", auth.currentUser.uid), () => {
+          utilities.getUser(user.uid).then((user) => {
+            setCurrentUser(user);
+            if (user.bandId.length > 0) {
+              onSnapshot(doc(getFirestore(), "bands", user.bandId), (asd) => {
+                utilities.getBand(user.bandId).then((band) => {
+                  setCurrentBand(band);
+                });
+              });
+            }
+          });
+        });
 
         //User is logged in
         setIsLoggedIn(true);
@@ -75,10 +79,16 @@ function App() {
   if (isLoggedIn) {
     return (
       <Routes>
-        <Route path="/" element={<Dashboard user={currentUser} />} />
+        <Route
+          path="/"
+          element={<Dashboard user={currentUser} band={currentBand} />}
+        />
         <Route path="/bandchat" element={<BandChat />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/finances" element={<Finances />} />
+        <Route
+          path="/finances"
+          element={<Finance user={currentUser} band={currentBand} />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/members" element={<Members />} />
         <Route path="/setlists" element={<SetLists />} />

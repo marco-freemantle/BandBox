@@ -30,3 +30,8 @@
 .menu-bottom {
   height: 22vh;
 }
+
+.link {
+  text-decoration: none;
+  color: white;
+}

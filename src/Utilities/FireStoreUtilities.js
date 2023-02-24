@@ -40,8 +40,29 @@ export async function getUser(_userId) {
     let userObject = {
       userid: docSnap.data().userid,
       bandName: docSnap.data().bandName,
+      bandId: docSnap.data().bandId,
     };
     return userObject;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Checks if band exists in Firestore
+ * @param _bandId The ID of the band to check the database for
+ * @return band if exists, false if not
+ */
+export async function getBand(_bandId) {
+  const docRef = await doc(getFirestore(), "bands", _bandId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    let bandObject = {
+      bandName: docSnap.data().bandName,
+      ownerId: docSnap.data().ownerId,
+    };
+    return bandObject;
   } else {
     return false;
   }

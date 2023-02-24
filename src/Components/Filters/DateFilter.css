@@ -1,0 +1,19 @@
+.filter_container {
+  margin-top: 0px;
+  margin-left: 400px;
+  width: 330px;
+  display: flex;
+}
+
+.month_dropdown_list {
+  margin: auto;
+}
+
+.year_dropdown_list {
+  margin: auto;
+}
+
+.reset_filters_button {
+  margin: auto;
+  width: 115px;
+}
