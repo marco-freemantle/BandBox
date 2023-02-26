@@ -1,6 +1,6 @@
 import "./FinanceGraph.css";
 import { Line } from "react-chartjs-2";
-import DateFilter from "../../../../Components/Filters/DateFilter";
+import DateFilter from "../../Filters/DateFilter";
 import React, { useState, useEffect } from "react";
 
 function FinanceGraph() {
