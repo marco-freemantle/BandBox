@@ -36,7 +36,7 @@ function NavigationBar() {
   }
 
   return (
-    <div className="App">
+    <div className="sidebar-main">
       <Sidebar
         backgroundColor="rgb(16,44,76)"
         className="sidebar"
@@ -118,7 +118,6 @@ function NavigationBar() {
             Members
           </MenuItem>
 
-          <div className="menu-bottom"></div>
           <MenuItem icon={<FaCog size={"25px"} />} className="menu-item">
             Settings
           </MenuItem>

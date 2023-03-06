@@ -2,6 +2,7 @@ import "./Dashboard.css";
 import NavigationBar from "../../Components/NavigationBar";
 import BandCreation from "../../Components/NewAccount/BandCreation";
 import FinanceOverview from "./Cards/Finance/FinanceOverview";
+import Todos from "./Cards/Todos/Todos";
 
 function Dashboard(props) {
   if (props.user === undefined) return;
@@ -13,11 +14,13 @@ function Dashboard(props) {
       <div className="dashboard-page">
         <NavigationBar />
         <div className="dashboard-main-content">
-          <div className="dashboard-vertical-div">
-            <FinanceOverview />
-            <div className="dashboard-event-card"></div>
+          <div className="wrapper">
+            <div className="box finance"></div>
+            <div className="box todos">
+              <Todos />
+            </div>
+            <div className="box events">Events</div>
           </div>
-          <div className="dashboard-todos"></div>
         </div>
       </div>
     );

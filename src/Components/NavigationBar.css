@@ -1,3 +1,7 @@
+.sidebar-main {
+  height: 100vh;
+}
+
 .sidebar {
   height: 100vh;
   color: aliceblue;
@@ -28,7 +32,9 @@
 }
 
 .menu-bottom {
-  height: 22vh;
+  position: fixed;
+  bottom: 0;
+  width: 13%;
 }
 
 .link {

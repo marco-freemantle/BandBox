@@ -22,6 +22,7 @@ function FinanceOverview() {
         display: false,
       },
     },
+    maintainAspectRatio: false,
   };
 
   //Data passed to the revenue doughnut
@@ -53,84 +54,9 @@ function FinanceOverview() {
   };
 
   return (
-    <div className="dashboard-finance-card">
-      <h2>Financial Overview - 30 Days</h2>
-      <div
-        style={{
-          display: "flex",
-        }}
-      >
-        <div className="doughnut-flex">
-          <div>
-            <Doughnut
-              data={data_revenue}
-              options={options}
-              className="financial-doughnut"
-            />
-            <h4 className="revenue-title">Revenue</h4>
-            <div className="counter-section">
-              <div>
-                <FaMusic size={"20"} />
-                <p className="counter-text">Events</p>
-                <p className="counter-value">1200</p>
-              </div>
-
-              <div>
-                <FaTshirt size={"20"} />
-                <p className="counter-text">Merch</p>
-                <p className="counter-value">340</p>
-              </div>
-
-              <div>
-                <FaHandsHelping size={"20"} />
-                <p className="counter-text">Other</p>
-                <p className="counter-value">347</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <Doughnut
-              data={data_expenses}
-              options={options}
-              className="financial-doughnut"
-            />
-            <h4 className="expenses-title">Expenses</h4>
-            <div className="counter-section">
-              <div>
-                <FaShuttleVan size={"20"} />
-                <p className="counter-text">Travel</p>
-                <p className="counter-value">1200</p>
-              </div>
-
-              <div>
-                <FaGuitar size={"20"} />
-                <p className="counter-text">Wages</p>
-                <p className="counter-value">340</p>
-              </div>
-
-              <div>
-                <FaMoneyBillWaveAlt size={"20"} />
-                <p className="counter-text">Other</p>
-                <p className="counter-value">347</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="statistics-container">
-          <div>
-            <h5 style={{ fontWeight: "400" }}>Revenue:</h5>
-            <h3>£13,000.00</h3>
-          </div>
-          <div>
-            <h5 style={{ fontWeight: "400" }}>Expenses:</h5>
-            <h3>£11,030.13</h3>
-          </div>
-          <div>
-            <h5 style={{ fontWeight: "400" }}>Profit:</h5>
-            <h3>£10,345.19</h3>
-          </div>
-        </div>
+    <div className="finance-overview-wrapper">
+      <div>
+        <Doughnut data={data_revenue} options={options} />
       </div>
     </div>
   );
