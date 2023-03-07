@@ -1,4 +1,65 @@
 .finance-overview-wrapper {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-doughnuts-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-left: -65px;
+}
+.doughnut-container {
+  height: 200px;
+  width: 400px;
+  display: flex;
+}
+
+.revenue-stats {
+  margin-left: -65px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-title {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: -2px;
+}
+
+.stat-value {
+  margin-left: 31px;
+  font-size: 18px;
+}
+
+.overview-stats {
+  width: 100%;
+  margin-top: 35px;
+}
+
+@media (max-width: 940px) {
+  .doughnut-container {
+    height: 150px;
+    width: 300px;
+  }
+
+  .finance-overview-wrapper {
+    margin-left: 10px;
+  }
+
+  .revenue-stats {
+    margin-top: -15px;
+  }
+}
+
+@media (max-width: 770px) {
+  .main-doughnuts-container {
+    margin-left: 0px;
+  }
+
+  .finance-overview-wrapper {
+    height: 160px;
+  }
 }

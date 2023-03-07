@@ -1,106 +1,70 @@
-import "./ExpenseEntryForm.css";
+import "./RevenueEntryForm.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import React, { useState } from "react";
-import * as ReactDOM from "react-dom";
 
-/**
- * @param props Props passed down from the CalorieChart.js component
- * @return The form for entering foods (name, calories, carbs, fats & proteins)
- */
 function ExpenseEntryForm(props) {
-  //Currently selected date
-  const [selectedDate, setSelectedDate] = useState(props.selectedDate);
   //Form data
-  const [nameOfFood, setNameOfFood] = useState();
-  const [caloriesAmount, setCaloriesAmount] = useState();
-  const [carbsAmount, setCarbsAmount] = useState();
-  const [fatAmount, setFatAmount] = useState();
-  const [proteinAmount, setProteinAmount] = useState();
-
-  /**
-   * Adds food entry to entryObject in CalorieChart.js
-   * @param event Form submission event
-   */
-  function handleCalorieEntry(event) {
-    event.preventDefault();
-    //Create new entry object
-    const entryObject = {
-      _selectedDate: selectedDate,
-      _nameOfFood: nameOfFood,
-      _caloriesAmount: caloriesAmount,
-      _carbsAmount: carbsAmount,
-      _fatAmount: fatAmount,
-      _proteinAmount: proteinAmount,
-    };
-
-    //Adds food entry to entryObject in CalorieChart.js
-    props.addFoodEntry(entryObject);
-
-    //Reset form fields
-    ReactDOM.findDOMNode(document.getElementById("foodName")).value = "";
-    ReactDOM.findDOMNode(document.getElementById("calorieAmount")).value = "";
-    ReactDOM.findDOMNode(document.getElementById("carbsAmount")).value = "";
-    ReactDOM.findDOMNode(document.getElementById("fatAmount")).value = "";
-    ReactDOM.findDOMNode(document.getElementById("proteinAmount")).value = "";
-  }
+  const [nameOfExpense, setNameOfExpense] = useState();
+  const [expenseAmount, setExpenseAmount] = useState();
+  const [notes, setNotes] = useState();
+  const [expenseType, setExpenseType] = useState();
+  const [date, setDate] = useState();
 
   return (
-    <div className="calorie-entry">
-      <Form
-        onSubmit={handleCalorieEntry}
-        className="calorie-entry-form"
-        autoComplete="off"
-      >
-        <h3 className="calorie-entry-form-field">Add Food Entry</h3>
-        <Form.Group className="mb-3">
-          <Form.Control
-            required
-            type="text"
-            onChange={(e) => {
-              setNameOfFood(e.target.value);
-              setSelectedDate(props.selectedDate);
-            }}
-            placeholder={"Name of Food"}
-            id="foodName"
-            className="calorie-entry-form-field"
-          />
-          <Form.Control
-            required
-            type="number"
-            onChange={(e) => setCaloriesAmount(e.target.value)}
-            placeholder={"Amount of Calories"}
-            id="calorieAmount"
-            className="calorie-entry-form-field"
-          />
-          <Form.Control
-            type="number"
-            onChange={(e) => setCarbsAmount(e.target.value)}
-            placeholder={"Amount of Carbs (grams)"}
-            id="carbsAmount"
-            className="calorie-entry-form-field"
-          />
-          <Form.Control
-            type="number"
-            onChange={(e) => setFatAmount(e.target.value)}
-            placeholder={"Amount of Fat (grams)"}
-            id="fatAmount"
-            className="calorie-entry-form-field"
-          />
-          <Form.Control
-            type="number"
-            onChange={(e) => setProteinAmount(e.target.value)}
-            placeholder={"Amount of Protein (grams)"}
-            id="proteinAmount"
-            className="calorie-entry-form-field"
-          />
-        </Form.Group>
+    <div className="revenue-entry-form">
+      <Form autoComplete="off">
+        <h3 className="revenue-entry-form-field">Add Expense Entry</h3>
+
+        <Form.Control
+          required
+          type="text"
+          onChange={(e) => {
+            setNameOfExpense(e.target.value);
+          }}
+          placeholder={"Name of Entry"}
+          id="revenueName"
+          className="revenue-entry-form-field"
+        />
+        <Form.Control
+          required
+          type="number"
+          onChange={(e) => setExpenseAmount(e.target.value)}
+          placeholder={"Expense Amount"}
+          id="revenueAmount"
+          className="revenue-entry-form-field"
+        />
+        <Form.Control
+          type="text"
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder={"Notes"}
+          id="proteinAmount"
+          className="revenue-entry-form-field"
+        />
+        <Form.Select
+          className="revenue-entry-form-field"
+          required
+          onChange={(e) => setExpenseType(e.target.value)}
+        >
+          <option value="">Expense Type</option>
+          <option value="Travel">Travel</option>
+          <option value="Wages">Wages</option>
+          <option value="Other">Other</option>
+        </Form.Select>
+        <Form.Control
+          type="Date"
+          onChange={(e) => setDate(e.target.value)}
+          id="revenueDate"
+          className="revenue-entry-form-field"
+          required
+        />
+
         <Button
           variant="primary"
           type="submit"
-          className="calorie-entry-form-field"
+          className="revenue-entry-form-field"
         >
-          Add Entry
+          Add Revenue Entry
         </Button>
       </Form>
     </div>

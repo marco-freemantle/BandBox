@@ -11,5 +11,8 @@
 }
 
 .finance-graph {
-  margin-top: 10px;
+  max-height: 475px;
+  min-height: 475px;
+  display: flex;
+  justify-content: center;
 }
