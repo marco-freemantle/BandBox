@@ -17,3 +17,50 @@
   margin: auto;
   width: 115px;
 }
+
+@media (max-width: 965px) {
+  .month_dropdown_list {
+    margin-right: 20px;
+  }
+
+  .year_dropdown_list {
+    margin-right: 20px;
+  }
+
+  .reset_filters_button {
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 696px) {
+  .filter_container {
+    margin-left: 125px;
+  }
+  .month_dropdown_list {
+    margin-right: 5px;
+  }
+
+  .year_dropdown_list {
+    margin-right: 5px;
+  }
+
+  .reset_filters_button {
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 525px) {
+  .filter_container {
+    margin-left: 0px;
+    display: flex;
+  }
+  .month_dropdown_list {
+    margin-right: 0px;
+  }
+  .year_dropdown_list {
+    margin-left: 5px;
+  }
+  .month_dropdown_list {
+    margin-left: 20px;
+  }
+}

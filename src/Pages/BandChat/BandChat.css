@@ -1,0 +1,55 @@
+.bandchat-main-content {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2%;
+}
+
+.band-chat {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  border-radius: 20px;
+  padding: 1%;
+  width: 70%;
+  height: 95%;
+  display: flex;
+}
+
+.participants-chat-section {
+  width: 30%;
+  padding-right: 1%;
+}
+
+.main-chat-section {
+  width: 70%;
+  padding-left: 1%;
+}
+
+@media (max-width: 1500px) {
+  .bandchat-main-content {
+    margin-left: 100px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 950px) {
+  .band-chat {
+    width: 100%;
+  }
+
+  .main-chat-section {
+    width: 100%;
+  }
+
+  .bandchat-main-content {
+    margin-top: 0px;
+  }
+}
+
+@media (max-width: 950px) {
+  .bandchat-main-content {
+    margin-left: 80px;
+  }
+}

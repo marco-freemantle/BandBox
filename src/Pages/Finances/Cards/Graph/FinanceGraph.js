@@ -103,12 +103,14 @@ function FinanceGraph() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className="title-and-filters-container">
         <h2>Finances</h2>
-        <DateFilter
-          changeMonthFilter={handleChangeMonthFilter}
-          changeYearFilter={handleChangeYearFilter}
-        />
+        <div className="filter-container">
+          <DateFilter
+            changeMonthFilter={handleChangeMonthFilter}
+            changeYearFilter={handleChangeYearFilter}
+          />
+        </div>
       </div>
       <div className="finance-graph">
         <Line options={options} data={graphData} />

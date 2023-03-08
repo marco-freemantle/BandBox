@@ -14,14 +14,16 @@ function Finance() {
           <div className="box graph">
             <FinanceGraph />
           </div>
+          <div className="box finance-table">
+            <FinanceTable />
+          </div>
+        </div>
+        <div className="finance-form-wrapper">
           <div className="box revenue-entry">
             <RevenueEntryForm />
           </div>
           <div className="box expense-entry">
             <ExpenseEntryForm />
-          </div>
-          <div className="box finance-table">
-            <FinanceTable />
           </div>
         </div>
       </div>

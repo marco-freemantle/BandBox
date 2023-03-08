@@ -1,7 +1,7 @@
 import "./DateFilter.css";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * @param props Props passed down by WeightGraph.js
@@ -13,6 +13,21 @@ function DateFilter(props) {
 
   //State that holds year filter
   const [yearFilter, setYearFilter] = useState("2023");
+
+  //Is mobile device
+  const [isDeviceSmall, setIsDeviceSmall] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  const handleResize = () => {
+    if (window.innerWidth < 527) {
+      setIsDeviceSmall(true);
+    } else {
+      setIsDeviceSmall(false);
+    }
+  };
 
   /**
    * @param eventKey The month filter to switch to
@@ -74,14 +89,17 @@ function DateFilter(props) {
           <Dropdown.Item eventKey={"2021"}>2021</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-
-      <Button
-        variant="warning"
-        className="reset_filters_button"
-        onClick={resetFilters}
-      >
-        Reset Filters
-      </Button>
+      {!isDeviceSmall && (
+        <>
+          <Button
+            variant="warning"
+            className="reset_filters_button"
+            onClick={resetFilters}
+          >
+            Reset Filters
+          </Button>
+        </>
+      )}
     </div>
   );
 }

@@ -1,0 +1,12 @@
+.participant-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 810px;
+}
+
+@media (max-width: 1500px) {
+  .participant-list {
+    max-height: 680px;
+  }
+}

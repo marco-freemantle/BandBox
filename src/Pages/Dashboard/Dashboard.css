@@ -178,5 +178,10 @@
   .events {
     grid-row: 3 / 4;
     grid-column: 1 / 3;
+    height: 355px;
+  }
+
+  .dashboard-main-content {
+    margin-left: 78px;
   }
 }

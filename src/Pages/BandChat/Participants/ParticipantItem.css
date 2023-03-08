@@ -1,0 +1,7 @@
+.participant-item-container {
+  background-color: #e3e3e6;
+  padding: 2%;
+  border-radius: 10px;
+  display: flex;
+  margin-bottom: 18px;
+}
