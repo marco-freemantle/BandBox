@@ -10,6 +10,7 @@
     "chart.js": "^4.2.1",
     "firebase": "^9.17.1",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.7.2",
     "react-bootstrap-sidebar-menu": "^2.0.3",
     "react-chartjs-2": "^5.2.0",
@@ -19,6 +20,7 @@
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
