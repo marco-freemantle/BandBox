@@ -38,7 +38,7 @@ function ExpenseEntryForm(props) {
           type="text"
           onChange={(e) => setNotes(e.target.value)}
           placeholder={"Notes"}
-          id="proteinAmount"
+          id="notes"
           className="revenue-entry-form-field"
         />
         <Form.Select

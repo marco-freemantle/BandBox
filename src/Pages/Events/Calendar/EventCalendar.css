@@ -1,0 +1,20 @@
+.calendar-event {
+  background-color: rgb(133, 212, 96);
+  white-space: normal !important;
+}
+
+.calendar-event:hover {
+  background-color: rgb(111, 175, 82) !important;
+  max-width: 100%;
+}
+
+.calendar-view * {
+  color: black !important;
+  text-decoration: none;
+  max-height: 680px;
+  min-width: 100%;
+}
+
+.add-event-button {
+  max-width: 10% !important;
+}

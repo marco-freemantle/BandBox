@@ -1,10 +1,22 @@
 import "./Tasks.css";
 import NavigationBar from "../../Components/NavigationBar";
+import CreateTask from "./Modals/CreateTask";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 const itemsFromBackend = [
+  { id: uuidv4(), content: "First Task" },
+  { id: uuidv4(), content: "Second Task" },
+  { id: uuidv4(), content: "Third Task" },
+  { id: uuidv4(), content: "Fourth Task" },
+  { id: uuidv4(), content: "Fifth Task" },
+  { id: uuidv4(), content: "First Task" },
+  { id: uuidv4(), content: "Second Task" },
+  { id: uuidv4(), content: "Third Task" },
+  { id: uuidv4(), content: "Fourth Task" },
+  { id: uuidv4(), content: "Fifth Task" },
   { id: uuidv4(), content: "First Task" },
   { id: uuidv4(), content: "Second Task" },
   { id: uuidv4(), content: "Third Task" },
@@ -14,15 +26,19 @@ const itemsFromBackend = [
 
 const columnsFromBackend = {
   [uuidv4()]: {
-    name: "Todo",
+    name: "Ideas",
     items: itemsFromBackend,
+  },
+  [uuidv4()]: {
+    name: "To do",
+    items: [],
   },
   [uuidv4()]: {
     name: "In Progress",
     items: [],
   },
   [uuidv4()]: {
-    name: "Done",
+    name: "Complete",
     items: [],
   },
 };
@@ -65,6 +81,7 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function Tasks() {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [modalShow, setModalShow] = useState(false);
 
   return (
     <div className="tasks-page">
@@ -84,8 +101,32 @@ function Tasks() {
                   }}
                   key={id}
                 >
-                  <h2>{column.name}</h2>
-                  <div style={{ margin: 8 }}>
+                  <div className="column-container">
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "90%",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h2>{column.name}</h2>
+                      <button
+                        style={{
+                          border: "none",
+                          outline: "none",
+                          background: "none",
+                          boxShadow: "none",
+                        }}
+                        onClick={() => setModalShow(true)}
+                      >
+                        <FaPlus size={20} />
+                      </button>
+                      <CreateTask
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                      />
+                    </div>
+
                     <Droppable droppableId={id} key={id}>
                       {(provided, snapshot) => {
                         return (
@@ -95,11 +136,9 @@ function Tasks() {
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "lightblue"
-                                : "lightgrey",
-                              padding: 4,
-                              width: 250,
-                              minHeight: 500,
+                                : "#ffffff",
                             }}
+                            className="task-column"
                           >
                             {column.items.map((item, index) => {
                               return (
@@ -117,14 +156,13 @@ function Tasks() {
                                         style={{
                                           userSelect: "none",
                                           padding: 16,
-                                          margin: "0 0 8px 0",
-                                          minHeight: "50px",
                                           backgroundColor: snapshot.isDragging
                                             ? "#263B4A"
                                             : "#456C86",
                                           color: "white",
                                           ...provided.draggableProps.style,
                                         }}
+                                        className="task-item"
                                       >
                                         {item.content}
                                       </div>
