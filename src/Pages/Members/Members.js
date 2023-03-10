@@ -1,7 +1,7 @@
 import "./Members.css";
 
 function Members() {
-  return;
+  return <div></div>;
 }
 
 export default Members;
