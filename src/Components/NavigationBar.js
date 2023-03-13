@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
+import Form from "react-bootstrap/Form";
 
 function NavigationBar() {
   const { collapseSidebar } = useProSidebar();
@@ -67,6 +68,15 @@ function NavigationBar() {
               <FaAlignJustify size={"30px"} />
             </button>
           </div>
+
+          {!collapsed && (
+            <div className="band-select-dropdown">
+              <Form.Select style={{ maxWidth: "90%" }}>
+                <option value="Onyx">Onyx Party Band</option>
+                <option value="Onyx">Cassino</option>
+              </Form.Select>
+            </div>
+          )}
 
           <MenuItem
             icon={<FaHome size={"25px"} />}

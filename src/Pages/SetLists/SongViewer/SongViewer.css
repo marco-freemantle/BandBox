@@ -1,0 +1,16 @@
+.song-notes-textarea {
+  height: 480px;
+  max-height: 480px;
+}
+
+@media (max-width: 1780px) {
+  .song-notes-textarea {
+    max-height: 370px;
+  }
+}
+
+@media (max-width: 1110px) {
+  .song-notes-textarea {
+    max-height: 300px;
+  }
+}

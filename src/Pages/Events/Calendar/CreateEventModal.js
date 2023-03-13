@@ -43,7 +43,7 @@ function CreateEventModal(props) {
           </div>
 
           <Form.Group className="create-event-form-field">
-            <Form.Label>Notes</Form.Label>
+            <Form.Label style={{ marginTop: "20px" }}>Notes</Form.Label>
             <Form.Control
               as="textarea"
               rows={5}
