@@ -2,9 +2,10 @@ import "./BandChat.css";
 import NavigationBar from "../../Components/NavigationBar";
 import ParticipantList from "./Participants/ParticipantsList";
 import ChatBox from "./ChatBox/ChatBox";
+import BandCreation from "../../Components/NewAccount/BandCreation";
 import { useEffect, useState } from "react";
 
-function BandChat() {
+function BandChat(props) {
   const [isDeviceSmall, setIsDeviceSmall] = useState(false);
 
   useEffect(() => {
@@ -18,6 +19,10 @@ function BandChat() {
       setIsDeviceSmall(false);
     }
   };
+
+  if (props.user.bandName === "") {
+    return <BandCreation />;
+  }
 
   return (
     <div className="dashboard-page">

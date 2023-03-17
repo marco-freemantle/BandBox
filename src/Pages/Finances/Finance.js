@@ -4,8 +4,12 @@ import FinanceGraph from "./Cards/Graph/FinanceGraph";
 import RevenueEntryForm from "./Cards/Forms/RevenueEntryForm";
 import ExpenseEntryForm from "./Cards/Forms/ExpenseEntryForm";
 import FinanceTable from "./Cards/Table/FinanceTable";
+import BandCreation from "../../Components/NewAccount/BandCreation";
 
-function Finance() {
+function Finance(props) {
+  if (props.user.bandName === "") {
+    return <BandCreation />;
+  }
   return (
     <div className="finance-page">
       <NavigationBar />

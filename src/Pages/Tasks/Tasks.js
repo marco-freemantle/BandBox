@@ -5,6 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
+import BandCreation from "../../Components/NewAccount/BandCreation";
 
 const itemsFromBackend = [
   { id: uuidv4(), content: "First Task" },
@@ -79,9 +80,13 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function Tasks() {
+function Tasks(props) {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [modalShow, setModalShow] = useState(false);
+
+  if (props.user.bandName === "") {
+    return <BandCreation />;
+  }
 
   return (
     <div className="tasks-page">

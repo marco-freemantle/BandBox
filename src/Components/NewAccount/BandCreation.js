@@ -19,8 +19,8 @@ function BandCreation() {
     <div style={{ display: "flex", backgroundColor: "#f3f3f5" }}>
       <NavigationBar />
       <div className="band-creation-container">
-        <div className="card">
-          <Form className="signup-form" onSubmit={createBand}>
+        <div className="band-creation-card">
+          <Form className="band-creation-form" onSubmit={createBand}>
             <h3>Create a New Band!</h3>
             <br />
             <Form.Group controlId="bandname">
@@ -37,7 +37,11 @@ function BandCreation() {
               Create Band
             </Button>
           </Form>
-          <Form className="signup-form">
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <h3>OR</h3>
+          </div>
+
+          <Form className="band-creation-form">
             <h3>Join an Existing Band!</h3>
             <br />
             <Form.Group controlId="bandname">
@@ -48,7 +52,7 @@ function BandCreation() {
                 onChange={(e) => setJoinCode(e.target.value)}
               />
               <Form.Text className="text-muted" style={{ marginLeft: "10px" }}>
-                Enter the invite code you recieved by email.
+                Enter your unique invite code
               </Form.Text>
             </Form.Group>
 

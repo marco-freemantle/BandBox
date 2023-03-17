@@ -6,8 +6,10 @@ import { FaPlus } from "react-icons/fa";
 import SongCard from "./SongCard/SongCard";
 import AddSongModal from "./Modal/AddSongModal";
 import SongViewer from "./SongViewer/SongViewer";
+import SongViewerMobile from "./SongViewerMobile/SongViewerMobile";
+import BandCreation from "../../Components/NewAccount/BandCreation";
 
-function SetLists() {
+function SetLists(props) {
   const [isDeviceSmall, setIsDeviceSmall] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
@@ -24,6 +26,10 @@ function SetLists() {
       setIsDeviceSmall(false);
     }
   };
+
+  if (props.user.bandName === "") {
+    return <BandCreation />;
+  }
 
   return (
     <div className="dashboard-page">
@@ -69,17 +75,18 @@ function SetLists() {
                 </div>
               </div>
               <div style={{ borderLeft: "2px solid grey" }} />
+              <div className="setlist-song-section">
+                <h3 style={{ marginBottom: "28px" }}>Selected Song</h3>
+
+                <SongViewer
+                  songName={"Valerie"}
+                  artistName={"Amy Winehouse"}
+                  notes={""}
+                />
+              </div>
             </>
           )}
-
-          <div className="setlist-song-section">
-            <h3 style={{ marginBottom: "28px" }}>Selected Song</h3>
-            <SongViewer
-              songName={"Valerie"}
-              artistName={"Amy Winehouse"}
-              notes={""}
-            />
-          </div>
+          {isDeviceSmall && <SongViewerMobile />}
         </div>
       </div>
     </div>

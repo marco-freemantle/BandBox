@@ -22,8 +22,7 @@ function Dashboard(props) {
   };
 
   if (props.user === undefined) return;
-
-  if (props.user.bandName === "" || props.user.bandName === undefined) {
+  if (props.user.bandName === "") {
     return <BandCreation />;
   } else {
     return (

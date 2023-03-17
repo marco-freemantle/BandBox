@@ -57,6 +57,7 @@ function App() {
         onSnapshot(doc(getFirestore(), "users", auth.currentUser.uid), () => {
           utilities.getUser(user.uid).then((user) => {
             setCurrentUser(user);
+            if (!user.bandId) return;
             if (user.bandId.length > 0) {
               onSnapshot(doc(getFirestore(), "bands", user.bandId), (asd) => {
                 utilities.getBand(user.bandId).then((band) => {
@@ -83,17 +84,32 @@ function App() {
           path="/"
           element={<Dashboard user={currentUser} band={currentBand} />}
         />
-        <Route path="/bandchat" element={<BandChat />} />
-        <Route path="/events" element={<Events />} />
+        <Route
+          path="/bandchat"
+          element={<BandChat user={currentUser} band={currentBand} />}
+        />
+        <Route
+          path="/events"
+          element={<Events user={currentUser} band={currentBand} />}
+        />
         <Route
           path="/finances"
           element={<Finance user={currentUser} band={currentBand} />}
         />
+        <Route
+          path="/members"
+          element={<Members user={currentUser} band={currentBand} />}
+        />
+        <Route
+          path="/setlists"
+          element={<SetLists user={currentUser} band={currentBand} />}
+        />
+        <Route
+          path="/tasks"
+          element={<Tasks user={currentUser} band={currentBand} />}
+        />
         <Route path="/login" element={<Login />} />
-        <Route path="/members" element={<Members />} />
-        <Route path="/setlists" element={<SetLists />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/tasks" element={<Tasks />} />
       </Routes>
     );
   } else {

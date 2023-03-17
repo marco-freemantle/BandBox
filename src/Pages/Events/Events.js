@@ -2,9 +2,10 @@ import "./Events.css";
 import NavigationBar from "../../Components/NavigationBar";
 import EventCalendar from "./Calendar/EventCalendar";
 import MobileEvents from "./Mobile/MobileEvents";
+import BandCreation from "../../Components/NewAccount/BandCreation";
 import { useState, useEffect } from "react";
 
-function Events() {
+function Events(props) {
   const [isDeviceSmall, setIsDeviceSmall] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,10 @@ function Events() {
   );
 
   let eventsPageContent = isDeviceSmall ? mobileEvents : desktopEvents;
+
+  if (props.user.bandName === "") {
+    return <BandCreation />;
+  }
 
   return (
     <div className="events-page">
