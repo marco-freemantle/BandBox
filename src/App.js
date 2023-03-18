@@ -15,6 +15,7 @@ import Members from "./Pages/Members/Members";
 import SetLists from "./Pages/SetLists/SetLists";
 import Signup from "./Pages/Signup/Signup";
 import Tasks from "./Pages/Tasks/Tasks";
+import Loading from "./Components/Loading/Loading";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCbx3bBl0D0qR4I5M4h3KKqkIVNyFmn-OM",
@@ -36,6 +37,9 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState();
   const [currentBand, setCurrentBand] = useState();
+
+  //Is loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   //Using useEffect to check if the user is logged in
   useEffect(() => {
@@ -62,6 +66,7 @@ function App() {
               onSnapshot(doc(getFirestore(), "bands", user.bandId), (asd) => {
                 utilities.getBand(user.bandId).then((band) => {
                   setCurrentBand(band);
+                  setIsLoading(false);
                 });
               });
             }
@@ -76,6 +81,8 @@ function App() {
       }
     });
   }, []);
+
+  if (isLoading) return <Loading />;
 
   if (isLoggedIn) {
     return (

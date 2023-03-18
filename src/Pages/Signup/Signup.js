@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import "./Signup.css";
 import { Link } from "react-router-dom";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * @returns The user signup page
@@ -16,6 +16,9 @@ function Signup() {
 
   //State for if an signup error occurs
   const [signupError, setSignupError] = useState("");
+
+  //State for device size
+  const [isDeviceSmall, setIsDeviceSmall] = useState(false);
 
   /**
    * Handles account creation with firebase
@@ -33,6 +36,18 @@ function Signup() {
         setSignupError(errorMessage);
       });
   }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  const handleResize = () => {
+    if (window.innerWidth < 1000) {
+      setIsDeviceSmall(true);
+    } else {
+      setIsDeviceSmall(false);
+    }
+  };
 
   /**
    * Gets the appropriate error message for the signup error
@@ -94,20 +109,31 @@ function Signup() {
           </Button>
 
           {getSignupErrorMessage()}
+
+          <br />
+          {isDeviceSmall && (
+            <Link to="/login">
+              <Button variant="primary" className="mobile-signup-button">
+                Sign in
+              </Button>
+            </Link>
+          )}
         </Form>
       </div>
-      <div className="sidebar-signup">
-        <h1 className="sidebar-signup-title">Have An Account?</h1>
-        <p className="sidebar-signup-text">Welcome back!</p>
-        <p className="sidebar-signup-text">
-          Click below to sign in to you BandBox account
-        </p>
-        <Link to="/login">
-          <Button variant="primary" className="sidebar-signup-button">
-            Sign in
-          </Button>
-        </Link>
-      </div>
+      {!isDeviceSmall && (
+        <div className="sidebar-signup">
+          <h1 className="sidebar-signup-title">Have An Account?</h1>
+          <p className="sidebar-signup-text">Welcome back!</p>
+          <p className="sidebar-signup-text">
+            Click below to sign in to you BandBox account
+          </p>
+          <Link to="/login">
+            <Button variant="primary" className="sidebar-signup-button">
+              Sign in
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

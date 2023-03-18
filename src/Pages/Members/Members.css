@@ -22,3 +22,26 @@
   display: flex;
   flex-direction: column;
 }
+
+.members-title {
+  margin-bottom: 30px;
+}
+
+@media (max-width: 1500px) {
+  .members-main-content {
+    height: 100vh;
+    margin-left: 80px;
+  }
+
+  .members-area {
+    width: 99%;
+  }
+}
+
+@media (max-width: 800px) {
+  .members-title {
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+  }
+}

@@ -68,7 +68,7 @@ function MemberInstance(props) {
         </Dropdown>
       </td>
       <td>
-        <Button>Remove</Button>
+        <Button variant="danger">Remove</Button>
       </td>
     </tr>
   );

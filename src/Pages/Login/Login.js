@@ -9,7 +9,7 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * @returns The login page
@@ -21,6 +21,9 @@ function Login() {
 
   //State for if an login error occurs
   const [loginError, setLoginError] = useState(false);
+
+  //State for device size
+  const [isDeviceSmall, setIsDeviceSmall] = useState(false);
 
   /**
    * Logs in users and sets their authentication persistence
@@ -49,6 +52,18 @@ function Login() {
         console.log(errorMessage);
       });
   }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  const handleResize = () => {
+    if (window.innerWidth < 1000) {
+      setIsDeviceSmall(true);
+    } else {
+      setIsDeviceSmall(false);
+    }
+  };
 
   return (
     <div className="login-page-flexbox">
@@ -79,22 +94,32 @@ function Login() {
           <Button variant="primary" className="login-button" type="submit">
             Sign In
           </Button>
-
           {loginError && (
             <p className="error-message-login">Incorrect email or password</p>
           )}
+
+          <br />
+          {isDeviceSmall && (
+            <Link to="/signup">
+              <Button variant="primary" className="mobile-signup-button">
+                Sign Up
+              </Button>
+            </Link>
+          )}
         </Form>
       </div>
-      <div className="sidebar-signup">
-        <h1 className="sidebar-signup-title">New Here?</h1>
-        <p className="sidebar-signup-text">Signup now to manage your band!</p>
-        <p className="sidebar-signup-text">It's completely free!</p>
-        <Link to="/signup">
-          <Button variant="primary" className="sidebar-signup-button">
-            Sign Up
-          </Button>
-        </Link>
-      </div>
+      {!isDeviceSmall && (
+        <div className="sidebar-signup">
+          <h1 className="sidebar-signup-title">New Here?</h1>
+          <p className="sidebar-signup-text">Signup now to manage your band!</p>
+          <p className="sidebar-signup-text">It's completely free!</p>
+          <Link to="/signup">
+            <Button variant="primary" className="sidebar-signup-button">
+              Sign Up
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -71,6 +71,7 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-content: center;
+  margin-bottom: -69px;
 }
 
 .link-signup {
@@ -81,4 +82,20 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-content: center;
+}
+
+@media (max-width: 1500px) {
+  .main-content-signup {
+    width: 100%;
+  }
+}
+
+@media (max-width: 510px) {
+  .signup-form {
+    width: 90%;
+  }
+
+  .form-title-signup {
+    margin-top: 175px;
+  }
 }

@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  justify-content: space-evenly;
 }
 
 .form-title-login {
@@ -106,6 +107,18 @@
   color: white;
 }
 
+.mobile-signup-button {
+  width: 135px;
+  height: 42px;
+  font-size: 18px;
+  color: black;
+  font-weight: 500;
+  border-width: 0px;
+  background: rgb(224, 223, 223);
+  border-radius: 50px;
+  margin-top: 50px;
+}
+
 .sidebar-signup-text {
   font-size: 22px;
   color: white;
@@ -116,4 +129,21 @@
   font-size: 20px;
   font-weight: 500;
   margin-top: 15px;
+  margin-bottom: -69px;
+}
+
+@media (max-width: 1500px) {
+  .main-content-login {
+    width: 100%;
+  }
+}
+
+@media (max-width: 545px) {
+  .login-form {
+    width: 90%;
+  }
+
+  .form-title-login {
+    margin-top: 175px;
+  }
 }
