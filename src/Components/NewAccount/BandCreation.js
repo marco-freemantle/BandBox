@@ -6,7 +6,7 @@ import * as utilities from "../../Utilities/FireStoreUtilities";
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 
-function BandCreation() {
+function BandCreation(props) {
   const [bandName, setBandName] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
@@ -17,7 +17,11 @@ function BandCreation() {
 
   return (
     <div style={{ display: "flex", backgroundColor: "#f3f3f5" }}>
-      <NavigationBar />
+      <NavigationBar
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
       <div className="band-creation-container">
         <div className="band-creation-card">
           <Form className="band-creation-form" onSubmit={createBand}>

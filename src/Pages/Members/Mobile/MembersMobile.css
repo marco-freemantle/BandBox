@@ -1,0 +1,32 @@
+.invite-code-mobile {
+  margin-top: -23px;
+}
+
+.join-request-dropdown {
+  display: flex;
+  flex-wrap: wrap;
+  height: 30px;
+  margin-bottom: 60px;
+  justify-content: space-between;
+}
+
+@media (max-width: 650px) {
+  .members-area {
+    padding-top: 7%;
+  }
+
+  .join-request-dropdown {
+    margin-bottom: 80px;
+  }
+}
+
+@media (max-width: 441px) {
+  .join-request-dropdown {
+    margin-bottom: 0px;
+    height: 170px;
+  }
+
+  .members-title {
+    margin-left: 0px;
+  }
+}

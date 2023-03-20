@@ -3,16 +3,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 import "./Signup.css";
 import { Link } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import React, { useState, useEffect } from "react";
 
 /**
  * @returns The user signup page
  */
 function Signup() {
-  //State for email and password
+  //State for email, name and password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   //State for if an signup error occurs
   const [signupError, setSignupError] = useState("");
@@ -28,8 +33,14 @@ function Signup() {
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        //Switches to home screen upon account creation
-        window.location.pathname = "/";
+        //Sets display name for the user
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: "",
+        }).then(() => {
+          //Switches to home screen upon account creation
+          window.location.pathname = "/";
+        });
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -77,11 +88,23 @@ function Signup() {
   return (
     <div className="signup-page-flexbox">
       <div className="main-content-signup">
-        <h1 className="form-title-login">Signup For BandBox!</h1>
+        <h1 className="form-title-signup">Signup For BandBox!</h1>
         <p className="form-subtitle-login">
           Signup using an email and password. It's Free!
         </p>
         <Form className="signup-form" onSubmit={createUserAccount}>
+          <Form.Group controlId="formBasicName">
+            <Form.Control
+              className="signup-name-field"
+              type="text"
+              placeholder="Enter full name"
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <Form.Text className="text-muted">
+              We need this so your band members can identify you.
+            </Form.Text>
+          </Form.Group>
           <Form.Group controlId="formBasicEmail">
             <Form.Control
               className="signup-email-field"

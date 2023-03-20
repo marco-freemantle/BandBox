@@ -1,9 +1,10 @@
-import "./ManageMemberModal.css";
+import "./JoinRequestModal.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-function ManageMemberModal(props) {
+function JoinRequestModal(props) {
+  if (!props.member) return;
   return (
     <Modal
       {...props}
@@ -13,7 +14,7 @@ function ManageMemberModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Manage Member
+          Join Request
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -27,24 +28,20 @@ function ManageMemberModal(props) {
               value={props.member.fullName}
             />
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="instrument">
+          <Form.Group className="mb-3" controlId="fullName">
+            <Form.Label>Role</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter role"
+              onChange={() => {}}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="fullName">
             <Form.Label>Instrument</Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter instrument"
               onChange={() => {}}
-              value={props.member.instrument}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="role">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter instrument"
-              onChange={() => {}}
-              value={props.member.role}
             />
           </Form.Group>
 
@@ -89,10 +86,10 @@ function ManageMemberModal(props) {
             }}
           >
             <Button variant="danger" type="submit">
-              Remove Member
+              Reject Join Request
             </Button>
             <Button variant="success" type="submit">
-              Save Changes
+              Accept Join Request
             </Button>
           </div>
         </Form>
@@ -101,4 +98,4 @@ function ManageMemberModal(props) {
   );
 }
 
-export default ManageMemberModal;
+export default JoinRequestModal;

@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import {
   doc,
   getFirestore,
@@ -35,12 +35,10 @@ export async function doesUserExist(_userId) {
 export async function getUser(_userId) {
   const docRef = await doc(getFirestore(), "users", _userId);
   const docSnap = await getDoc(docRef);
-
   if (docSnap.exists()) {
     let userObject = {
       userid: docSnap.data().userid,
-      bandName: docSnap.data().bandName,
-      bandId: docSnap.data().bandId,
+      bands: docSnap.data().bands,
     };
     return userObject;
   } else {
@@ -58,11 +56,7 @@ export async function getBand(_bandId) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    let bandObject = {
-      bandName: docSnap.data().bandName,
-      ownerId: docSnap.data().ownerId,
-    };
-    return bandObject;
+    return docSnap.data();
   } else {
     return false;
   }
@@ -75,23 +69,55 @@ export async function getBand(_bandId) {
 export async function addUser(_userId) {
   await setDoc(doc(getFirestore(), "users", _userId), {
     userid: _userId,
-    bandName: "",
-    bandId: "",
+    bands: [],
   });
 }
 
 /**
  * Create new band
  * @param _userId The ID of the user to add the band for
- * @param _bandName The calorie entry object to add
+ * @param _bandName The band name
  */
 export async function createBand(_userId, _bandName) {
-  const userRef = doc(getFirestore(), "users", _userId);
+  const auth = getAuth();
 
+  //Reference to user document
+  const userRef = doc(getFirestore(), "users", _userId);
+  const docSnap = await getDoc(userRef);
+
+  //Add new band to bands collection
   const docRef = await addDoc(collection(getFirestore(), "bands"), {
     bandName: _bandName,
     ownerId: _userId,
+    members: [
+      {
+        fullName: auth.currentUser.displayName,
+        role: "Leader",
+        instrument: "",
+        permissions: {
+          dashboard: true,
+          bandChat: true,
+          tasks: true,
+          events: true,
+          finances: true,
+          setLists: true,
+        },
+      },
+    ],
+    inviteCode: "",
+    joinRequests: [],
   });
 
-  await updateDoc(userRef, { bandName: _bandName, bandId: docRef.id });
+  await updateDoc(docRef, { inviteCode: docRef.id });
+
+  //Create new band object
+  const newBandObject = { bandName: _bandName, bandId: docRef.id };
+
+  //Append new band to the user's band list
+  const newBandsList = [...docSnap.data().bands, newBandObject];
+
+  //Update user band list with new band list
+  await updateDoc(userRef, { bands: newBandsList });
+
+  return docRef.id;
 }

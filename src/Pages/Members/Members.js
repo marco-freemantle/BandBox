@@ -10,14 +10,15 @@ import BandCreation from "../../Components/NewAccount/BandCreation";
 import { uuidv4 } from "@firebase/util";
 import { useEffect, useState } from "react";
 import MembersMobile from "./Mobile/MembersMobile";
-
-const membersData = [
-  { fullName: "Marco Freemantle", instrument: "Drums", role: "Leader" },
-  { fullName: "Rob Freemantle", instrument: "Guitar", role: "Musician" },
-];
+import { Form, Button, Dropdown } from "react-bootstrap";
+import JoinRequestModal from "./JoinRequestModal/JoinRequestModal";
 
 function Members(props) {
+  //Is user viewing on a device smaller than 750px width
   const [isDeviceSmall, setIsDeviceSmall] = useState(false);
+
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedJoinRequest, setSelectedJoinRequest] = useState();
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -31,24 +32,114 @@ function Members(props) {
     }
   };
 
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  //If the current user object.bands is not defined, return
+  if (props.user.bands === undefined) return;
+  //If current user has no bands, show band creation page
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   }
 
+  //If the current band object is undefined, return
+  if (!props.band) return;
+
+  //Only show for large devices
   if (!isDeviceSmall) {
     return (
       <div className="members-page">
-        <NavigationBar />
+        <NavigationBar
+          user={props.user}
+          selectedBand={props.bandId}
+          setSelectedBand={props.setSelectedBand}
+        />
 
         <div className="members-main-content">
           <div className="members-area">
-            <h2 className="members-title">Members</h2>
+            <div
+              style={{
+                display: "flex",
+                height: "30px",
+                marginBottom: "60px",
+                justifyContent: "space-between",
+              }}
+            >
+              <h2 className="members-title">Members</h2>
+              <div style={{ marginTop: "-23px" }}>
+                <div style={{ display: "flex" }}>
+                  <p style={{ margin: "0px" }}>Invite Code</p>
+                  <OverlayTrigger
+                    placement="left"
+                    overlay={
+                      <Tooltip id="tooltip">
+                        Send this code to your band members. They can use it to
+                        join this workspace.
+                      </Tooltip>
+                    }
+                  >
+                    <Image
+                      roundedCircle
+                      src={questionMark}
+                      fluid
+                      style={{
+                        maxHeight: "17px",
+                        maxWidth: "17px",
+                        marginTop: "4px",
+                        marginLeft: "3px",
+                      }}
+                    />
+                  </OverlayTrigger>
+                </div>
+                <Form.Control
+                  type="text"
+                  value={props.band.inviteCode}
+                  readOnly
+                />
+              </div>
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic">
+                  Join Requests
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  {props.band.joinRequests.map((user) => {
+                    return (
+                      <div
+                        key={uuidv4()}
+                        style={{ marginLeft: "5px", marginRight: "5px" }}
+                      >
+                        <Button
+                          className="join-request-button"
+                          onClick={() => {
+                            setSelectedJoinRequest(user);
+                            setModalShow(true);
+                          }}
+                        >
+                          {user.fullName}
+                          <div className="notification-circle" />
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </Dropdown.Menu>
+                <JoinRequestModal
+                  show={modalShow}
+                  onHide={() => setModalShow(false)}
+                  member={selectedJoinRequest}
+                />
+              </Dropdown>
+            </div>
+
             <Table style={{ minHeight: "20%", borderBottom: "transparent" }}>
               <thead>
                 <tr>
                   <th>Full Name</th>
-                  <th>Instrument</th>
                   <th>Role</th>
+                  <th>Instrument</th>
                   <th>
                     Permissions
                     <OverlayTrigger
@@ -75,7 +166,7 @@ function Members(props) {
                 </tr>
               </thead>
               <tbody>
-                {membersData.map((member) => {
+                {props.band.members.map((member) => {
                   return <MemberInstance member={member} key={uuidv4()} />;
                 })}
               </tbody>
@@ -84,13 +175,14 @@ function Members(props) {
         </div>
       </div>
     );
+    //Only show for small devices
   } else {
     return (
       <div className="members-page">
         <NavigationBar />
 
         <div className="members-main-content">
-          <MembersMobile members={membersData} />
+          <MembersMobile band={props.band} />
         </div>
       </div>
     );

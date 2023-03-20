@@ -84,13 +84,24 @@ function Tasks(props) {
   const [columns, setColumns] = useState(columnsFromBackend);
   const [modalShow, setModalShow] = useState(false);
 
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  if (props.user.bands === undefined) return;
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   }
 
   return (
     <div className="tasks-page">
-      <NavigationBar />
+      <NavigationBar
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
       <div className="tasks-main-content">
         <div className="task-list-container">
           <DragDropContext

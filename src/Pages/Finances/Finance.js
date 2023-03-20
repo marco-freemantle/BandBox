@@ -7,12 +7,23 @@ import FinanceTable from "./Cards/Table/FinanceTable";
 import BandCreation from "../../Components/NewAccount/BandCreation";
 
 function Finance(props) {
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  if (props.user.bands === undefined) return;
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   }
   return (
     <div className="finance-page">
-      <NavigationBar />
+      <NavigationBar
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
       <div className="finance-main-content">
         <div className="finance-wrapper">
           <div className="box graph">

@@ -32,6 +32,12 @@
 .signup-email-field {
   height: 50px;
   border-radius: 15px;
+  margin-top: 20px;
+}
+
+.signup-name-field {
+  height: 50px;
+  border-radius: 15px;
 }
 
 .signup-password-field {
@@ -84,18 +90,30 @@
   align-content: center;
 }
 
+.form-title-signup {
+  margin-top: 250px;
+  font-size: 55px;
+  font-weight: bolder;
+}
+
 @media (max-width: 1500px) {
   .main-content-signup {
     width: 100%;
   }
 }
 
-@media (max-width: 510px) {
+@media (max-width: 1000px) {
+  .form-title-signup {
+    margin-top: 150px;
+  }
+}
+
+@media (max-width: 544px) {
   .signup-form {
     width: 90%;
   }
 
   .form-title-signup {
-    margin-top: 175px;
+    margin-top: 100px;
   }
 }

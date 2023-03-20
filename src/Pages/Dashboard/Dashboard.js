@@ -21,13 +21,23 @@ function Dashboard(props) {
     }
   };
 
-  if (props.user === undefined) return;
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  if (props.user.bands === undefined) return;
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   } else {
     return (
       <div className="dashboard-page">
-        <NavigationBar />
+        <NavigationBar
+          user={props.user}
+          selectedBand={props.bandId}
+          setSelectedBand={props.setSelectedBand}
+        />
         <div className="dashboard-main-content">
           <div className="wrapper">
             <div className="box finance">

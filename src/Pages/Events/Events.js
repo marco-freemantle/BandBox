@@ -32,13 +32,24 @@ function Events(props) {
 
   let eventsPageContent = isDeviceSmall ? mobileEvents : desktopEvents;
 
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  if (props.user.bands === undefined) return;
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   }
 
   return (
     <div className="events-page">
-      <NavigationBar />
+      <NavigationBar
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
       <div className="events-main-content">{eventsPageContent}</div>
     </div>
   );

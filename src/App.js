@@ -28,24 +28,29 @@ const firebaseConfig = {
 };
 
 //Initialise firebase application
-// eslint-disable-next-line
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 function App() {
   //Is the user currently logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //Current user object retrieved from firestore
   const [currentUser, setCurrentUser] = useState();
+  //Current band object retrieved from firestore
   const [currentBand, setCurrentBand] = useState();
+
+  //The current bandId selected from the dropdown in navigation bar
+  const [currentBandId, setCurrentBandId] = useState();
 
   //Is loading state
   const [isLoading, setIsLoading] = useState(true);
 
+  //Firestore auth
+  const auth = getAuth();
+
   //Using useEffect to check if the user is logged in
   useEffect(() => {
     //Checks if current user is logged in
-    const auth = getAuth();
-
     auth.onAuthStateChanged((user) => {
       //User is logged in
       if (user) {
@@ -54,21 +59,17 @@ function App() {
           //If user is not in database
           if (!userExists) {
             //Adds user to Firestore database
-            utilities.addUser(user.uid, user.displayName);
+            utilities.addUser(user.uid);
           }
         });
 
         onSnapshot(doc(getFirestore(), "users", auth.currentUser.uid), () => {
           utilities.getUser(user.uid).then((user) => {
             setCurrentUser(user);
-            if (!user.bandId) return;
-            if (user.bandId.length > 0) {
-              onSnapshot(doc(getFirestore(), "bands", user.bandId), (asd) => {
-                utilities.getBand(user.bandId).then((band) => {
-                  setCurrentBand(band);
-                  setIsLoading(false);
-                });
-              });
+            setIsLoading(false);
+            if (!user.bands) return;
+            if (user.bands.length > 0) {
+              setCurrentBandId(user.bands[0].bandId);
             }
           });
         });
@@ -78,42 +79,106 @@ function App() {
       } else {
         //User is not logged in
         setIsLoggedIn(false);
+        setIsLoading(false);
       }
     });
   }, []);
 
+  useEffect(() => {
+    if (currentBandId) {
+      onSnapshot(doc(getFirestore(), "bands", currentBandId), (doc) => {
+        utilities.getBand(currentBandId).then((band) => {
+          setCurrentBand(band);
+        });
+      });
+    }
+  }, [currentBandId]);
+
   if (isLoading) return <Loading />;
+
+  function setBand(bandId) {
+    setCurrentBandId(bandId);
+  }
 
   if (isLoggedIn) {
     return (
       <Routes>
         <Route
           path="/"
-          element={<Dashboard user={currentUser} band={currentBand} />}
+          element={
+            <Dashboard
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/bandchat"
-          element={<BandChat user={currentUser} band={currentBand} />}
+          element={
+            <BandChat
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/events"
-          element={<Events user={currentUser} band={currentBand} />}
+          element={
+            <Events
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/finances"
-          element={<Finance user={currentUser} band={currentBand} />}
+          element={
+            <Finance
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/members"
-          element={<Members user={currentUser} band={currentBand} />}
+          element={
+            <Members
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/setlists"
-          element={<SetLists user={currentUser} band={currentBand} />}
+          element={
+            <SetLists
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route
           path="/tasks"
-          element={<Tasks user={currentUser} band={currentBand} />}
+          element={
+            <Tasks
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

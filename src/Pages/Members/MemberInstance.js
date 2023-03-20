@@ -14,16 +14,16 @@ function MemberInstance(props) {
       <td>
         <Form.Control
           type="text"
-          placeholder="Instrument"
-          value={props.member.instrument}
+          placeholder="Role"
+          value={props.member.role}
           onChange={() => {}}
         />
       </td>
       <td>
         <Form.Control
           type="text"
-          placeholder="Role"
-          value={props.member.role}
+          placeholder="Instrument"
+          value={props.member.instrument}
           onChange={() => {}}
         />
       </td>
@@ -61,6 +61,11 @@ function MemberInstance(props) {
               <Form.Check
                 type="checkbox"
                 label={"Set Lists"}
+                style={{ marginBottom: "5px" }}
+              />
+              <Form.Check
+                type="checkbox"
+                label={"Members"}
                 style={{ marginBottom: "5px" }}
               />
             </Form.Group>

@@ -20,13 +20,24 @@ function BandChat(props) {
     }
   };
 
-  if (props.user.bandName === "") {
-    return <BandCreation />;
+  if (props.user.bands === undefined) return;
+  if (props.user.bands.length === 0) {
+    return (
+      <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
   }
 
   return (
     <div className="dashboard-page">
-      <NavigationBar />
+      <NavigationBar
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
       <div className="bandchat-main-content">
         <div className="band-chat">
           {!isDeviceSmall && (

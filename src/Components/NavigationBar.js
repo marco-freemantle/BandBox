@@ -12,15 +12,20 @@ import {
   FaUsers,
   FaCog,
   FaPowerOff,
+  FaPlus,
 } from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
 import { Link } from "react-router-dom";
-import Form from "react-bootstrap/Form";
+import { uuidv4 } from "@firebase/util";
+import { Form } from "react-bootstrap";
+import AddBandModal from "./AddBandModal/AddBandModal";
 
-function NavigationBar() {
+function NavigationBar(props) {
   const { collapseSidebar } = useProSidebar();
 
   const [collapsed, setCollapsed] = useState(false);
+
+  const [modalShow, setModalShow] = useState(false);
 
   /**
    * Logs the user out
@@ -34,6 +39,56 @@ function NavigationBar() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  //Set selected band in app.js
+  function handleBandChange(event) {
+    props.setSelectedBand(event.target.value);
+  }
+
+  if (!props.user) return;
+
+  let workspaceDropDown;
+  if (props.user.bands.length > 0) {
+    workspaceDropDown = (
+      <div className="band-select-dropdown">
+        <Form.Select
+          style={{ maxWidth: "90%", marginBottom: "5px" }}
+          onChange={handleBandChange}
+          value={props.selectedBand}
+        >
+          {props.user.bands.map((band) => {
+            return (
+              <option value={band.bandId} key={uuidv4()}>
+                {band.bandName}
+              </option>
+            );
+          })}
+        </Form.Select>
+        <div style={{ width: "90%" }}>
+          <button
+            className="add-band-button"
+            onClick={() => setModalShow(true)}
+          >
+            Add Band
+            <FaPlus style={{ marginTop: "-3px", marginLeft: "10px" }} />
+          </button>
+        </div>
+        <AddBandModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          handleBandChange={handleBandChange}
+        />
+      </div>
+    );
+  } else {
+    workspaceDropDown = (
+      <div className="band-select-dropdown">
+        <Form.Select style={{ maxWidth: "92%" }}>
+          <option value="noworkspaces">No Bands</option>
+        </Form.Select>
+      </div>
+    );
   }
 
   return (
@@ -69,14 +124,7 @@ function NavigationBar() {
             </button>
           </div>
 
-          {!collapsed && (
-            <div className="band-select-dropdown">
-              <Form.Select style={{ maxWidth: "90%" }}>
-                <option value="Onyx">Onyx Party Band</option>
-                <option value="Onyx">Cassino</option>
-              </Form.Select>
-            </div>
-          )}
+          {!collapsed && workspaceDropDown}
 
           <MenuItem
             icon={<FaHome size={"25px"} />}
