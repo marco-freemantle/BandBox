@@ -6,6 +6,8 @@ import * as utilities from "../../Utilities/FireStoreUtilities";
 
 function AddBandModal(props) {
   const [bandName, setBandName] = useState("");
+  const [joinCode, setJoinCode] = useState("");
+  const [joinBandResponse, setJoinBandResponse] = useState();
 
   function createBand(event) {
     event.preventDefault();
@@ -22,7 +24,16 @@ function AddBandModal(props) {
     });
 
     setBandName("");
+    setJoinCode("");
+    setJoinBandResponse();
     props.onHide();
+  }
+
+  function joinBand(event) {
+    event.preventDefault();
+    utilities.sendJoinRequest(joinCode).then((response) => {
+      setJoinBandResponse(response);
+    });
   }
 
   return (
@@ -35,7 +46,7 @@ function AddBandModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Create Band
+          Create/Join a Band
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -59,6 +70,43 @@ function AddBandModal(props) {
               style={{ minWidth: "250px" }}
             >
               Create Band
+            </Button>
+          </div>
+        </Form>
+        <h4
+          style={{
+            textAlign: "center",
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          OR
+        </h4>
+        <Form onSubmit={joinBand} id="newTaskForm">
+          <Form.Group className="mb-3">
+            <Form.Label>Invite Code</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter invite codes"
+              onChange={(e) => {
+                setJoinCode(e.target.value);
+              }}
+              value={joinCode}
+              required
+            />
+          </Form.Group>
+          {joinBandResponse && (
+            <p className="join-band-response" style={joinBandResponse.style}>
+              {joinBandResponse.text}
+            </p>
+          )}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="primary"
+              type="submit"
+              style={{ minWidth: "250px" }}
+            >
+              Join Band
             </Button>
           </div>
         </Form>

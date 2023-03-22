@@ -2,9 +2,53 @@ import "./JoinRequestModal.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import { useState } from "react";
+import * as utilities from "../../../Utilities/FireStoreUtilities";
 
 function JoinRequestModal(props) {
+  const [role, setRole] = useState("");
+  const [instrument, setInstrument] = useState("");
+  const [permissions, setPermissions] = useState({
+    dashboard: false,
+    bandChat: false,
+    tasks: false,
+    events: false,
+    finances: false,
+    setLists: false,
+  });
+
   if (!props.member) return;
+
+  function rejectRequest() {
+    utilities.rejectJoinRequest(props.member, props.band.inviteCode);
+
+    setRole("");
+    setInstrument("");
+    setPermissions({
+      dashboard: false,
+      bandChat: false,
+      tasks: false,
+      events: false,
+      finances: false,
+      setLists: false,
+    });
+
+    props.onHide();
+  }
+
+  function acceptRequest() {
+    const userObject = {
+      fullName: props.member.fullName,
+      userId: props.member.userId,
+      role: role,
+      instrument: instrument,
+      permissions: permissions,
+    };
+
+    utilities.acceptJoinRequest(userObject, props.band);
+    props.onHide();
+  }
+
   return (
     <Modal
       {...props}
@@ -33,7 +77,9 @@ function JoinRequestModal(props) {
             <Form.Control
               type="text"
               placeholder="Enter role"
-              onChange={() => {}}
+              onChange={(e) => {
+                setRole(e.target.value);
+              }}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="fullName">
@@ -41,7 +87,9 @@ function JoinRequestModal(props) {
             <Form.Control
               type="text"
               placeholder="Enter instrument"
-              onChange={() => {}}
+              onChange={(e) => {
+                setInstrument(e.target.value);
+              }}
             />
           </Form.Group>
 
@@ -51,31 +99,67 @@ function JoinRequestModal(props) {
               type="checkbox"
               label={"Dashboard"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  dashboard: e.target.checked,
+                });
+              }}
             />
             <Form.Check
               type="checkbox"
               label={"Band Chat"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  bandChat: e.target.checked,
+                });
+              }}
             />
             <Form.Check
               type="checkbox"
               label={"Tasks"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  tasks: e.target.checked,
+                });
+              }}
             />
             <Form.Check
               type="checkbox"
               label={"Events"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  events: e.target.checked,
+                });
+              }}
             />
             <Form.Check
               type="checkbox"
               label={"Finances"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  finances: e.target.checked,
+                });
+              }}
             />
             <Form.Check
               type="checkbox"
               label={"Set Lists"}
               style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  setLists: e.target.checked,
+                });
+              }}
             />
           </Form.Group>
           <div
@@ -85,10 +169,10 @@ function JoinRequestModal(props) {
               justifyContent: "space-between",
             }}
           >
-            <Button variant="danger" type="submit">
+            <Button variant="danger" onClick={rejectRequest}>
               Reject Join Request
             </Button>
-            <Button variant="success" type="submit">
+            <Button variant="success" onClick={acceptRequest}>
               Accept Join Request
             </Button>
           </div>

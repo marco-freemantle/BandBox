@@ -1,13 +1,12 @@
 import { getAuth } from "firebase/auth";
+import { isEqual } from "lodash";
 import {
   doc,
   getFirestore,
   setDoc,
   getDoc,
-  getDocs,
   collection,
   updateDoc,
-  deleteDoc,
   addDoc,
 } from "firebase/firestore";
 
@@ -92,6 +91,7 @@ export async function createBand(_userId, _bandName) {
     members: [
       {
         fullName: auth.currentUser.displayName,
+        userId: auth.currentUser.uid,
         role: "Leader",
         instrument: "",
         permissions: {
@@ -112,12 +112,114 @@ export async function createBand(_userId, _bandName) {
 
   //Create new band object
   const newBandObject = { bandName: _bandName, bandId: docRef.id };
-
   //Append new band to the user's band list
   const newBandsList = [...docSnap.data().bands, newBandObject];
-
   //Update user band list with new band list
   await updateDoc(userRef, { bands: newBandsList });
-
   return docRef.id;
+}
+
+/**
+ * Request to join a bands workspace
+ * @param _bandId The Id of the band to send the request to
+ */
+export async function sendJoinRequest(_bandId) {
+  const auth = getAuth();
+
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", _bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Invite code is invalid
+  if (!docSnap.data()) {
+    return {
+      text: "That is not a valid invite code.",
+      style: { color: "red", marginTop: "25px", textAlign: "center" },
+    };
+  }
+
+  //Create user join request object
+  const joinRequest = {
+    fullName: auth.currentUser.displayName,
+    userId: auth.currentUser.uid,
+  };
+
+  //Check if user has already sent a join request
+  const requestExists = docSnap.data().joinRequests.some((request) => {
+    return isEqual(request, joinRequest);
+  });
+
+  if (requestExists) {
+    return {
+      text: "You have already sent a join request. The band leader will review your request.",
+      style: { color: "red", marginTop: "25px", textAlign: "center" },
+    };
+  }
+
+  //Append new request to the band's requests list
+  const newRequestsLists = [...docSnap.data().joinRequests, joinRequest];
+
+  //Update band request list with new list
+  await updateDoc(bandRef, { joinRequests: newRequestsLists });
+
+  return {
+    text: "You have sent a join request! Sit tight, the band leader will review your request.",
+    style: { color: "green", marginTop: "25px", textAlign: "center" },
+  };
+}
+
+/**
+ * Reject a users join request
+ * @param _user The user object to reject
+ * @param _bandId The id of the band that is rejecting the request
+ */
+export async function rejectJoinRequest(_user, _bandId) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", _bandId);
+  const docSnap = await getDoc(bandRef);
+
+  const newJoinRequestArray = docSnap
+    .data()
+    .joinRequests.filter((request) => !isEqual(request, _user));
+
+  //Update band request list with new list (join request has been removed)
+  await updateDoc(bandRef, { joinRequests: newJoinRequestArray });
+}
+
+/**
+ * Accepts a users join request
+ * @param _user The user object to accept
+ * @param _band The band that is accepting the request
+ */
+export async function acceptJoinRequest(_user, _band) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", _band.inviteCode);
+  const docSnap = await getDoc(bandRef);
+
+  const newJoinRequestArray = docSnap
+    .data()
+    .joinRequests.filter((request) => !isEqual(request.userId, _user.userId));
+
+  //Update band request list with new list (join request has been removed)
+  await updateDoc(bandRef, { joinRequests: newJoinRequestArray });
+
+  //Add new member to the band's members list
+  let newMembersList = docSnap.data().members;
+  newMembersList.push(_user);
+
+  await updateDoc(bandRef, { members: newMembersList });
+
+  //Add band to user's band list
+  const userRef = doc(getFirestore(), "users", _user.userId);
+  const userDocSnap = await getDoc(userRef);
+
+  const newBandObject = {
+    bandId: _band.inviteCode,
+    bandName: _band.bandName,
+  };
+
+  //Append new band to the user's band list
+  const newBandsList = [...userDocSnap.data().bands, newBandObject];
+  //Update user band list with new band list
+  await updateDoc(userRef, { bands: newBandsList });
 }

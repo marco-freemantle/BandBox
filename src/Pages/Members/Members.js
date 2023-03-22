@@ -130,6 +130,7 @@ function Members(props) {
                   show={modalShow}
                   onHide={() => setModalShow(false)}
                   member={selectedJoinRequest}
+                  band={props.band}
                 />
               </Dropdown>
             </div>

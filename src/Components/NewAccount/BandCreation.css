@@ -41,6 +41,11 @@
   border-radius: 50px;
 }
 
+.join-band-response {
+  margin-top: 25px;
+  text-align: center;
+}
+
 @media (max-width: 1500px) {
   .band-creation-container {
     height: 100vh;
