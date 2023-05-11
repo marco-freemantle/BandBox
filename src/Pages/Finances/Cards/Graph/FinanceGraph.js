@@ -90,7 +90,7 @@ function FinanceGraph() {
     labels,
     datasets: [
       {
-        label: "Average Weight (Kg)",
+        label: "Profit (£)",
         data: [123, 23, 34, 45, 45, 56],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",

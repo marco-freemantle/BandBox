@@ -49,6 +49,25 @@
   align-items: center;
 }
 
+.item-content {
+  margin: 0%;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.item-date {
+  margin: 0%;
+  font-size: 14px;
+}
+
+.delete-icon {
+  visibility: hidden;
+}
+
+.task-item:hover .delete-icon {
+  visibility: visible;
+}
+
 @media (max-width: 1680px) {
   .column-container {
     margin-left: 20px;

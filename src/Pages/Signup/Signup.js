@@ -29,6 +29,7 @@ function Signup() {
    * Handles account creation with firebase
    */
   function createUserAccount(event) {
+    //Stops the page from reloading
     event.preventDefault();
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
@@ -43,6 +44,7 @@ function Signup() {
         });
       })
       .catch((error) => {
+        //Return an error message
         const errorMessage = error.message;
         setSignupError(errorMessage);
       });

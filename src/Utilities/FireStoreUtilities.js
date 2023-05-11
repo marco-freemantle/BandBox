@@ -106,6 +106,20 @@ export async function createBand(_userId, _bandName) {
     ],
     inviteCode: "",
     joinRequests: [],
+    tasks: {
+      Complete: {
+        items: [],
+      },
+      Ideas: {
+        items: [],
+      },
+      "In Progress": {
+        items: [],
+      },
+      "To do": {
+        items: [],
+      },
+    },
   });
 
   await updateDoc(docRef, { inviteCode: docRef.id });
@@ -222,4 +236,39 @@ export async function acceptJoinRequest(_user, _band) {
   const newBandsList = [...userDocSnap.data().bands, newBandObject];
   //Update user band list with new band list
   await updateDoc(userRef, { bands: newBandsList });
+}
+
+/**
+ * Updates task list in firestore
+ * @param _bandId The band that is changing its tasks
+ */
+export async function updateTaskList(_bandId, taskColumns) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", _bandId);
+
+  const newTaskList = {
+    Complete: {
+      items: [],
+    },
+    Ideas: {
+      items: [],
+    },
+    "In Progress": {
+      items: [],
+    },
+    "To do": {
+      items: [],
+    },
+  };
+
+  for (const [, value] of Object.entries(taskColumns)) {
+    for (const [key, items] of Object.entries(newTaskList)) {
+      if (value.name === key) {
+        items.items = value.items;
+      }
+    }
+  }
+
+  //Update band task list with new task list
+  await updateDoc(bandRef, { tasks: newTaskList });
 }

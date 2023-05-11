@@ -4,14 +4,13 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 
-function CreateTask(props) {
+function CreateTask({ addNewTask, columnId, ...props }) {
   const [taskName, setTaskName] = useState("");
   const [dueDate, setDueDate] = useState("");
 
   function createTaskSubmit(event) {
     event.preventDefault();
-    console.log(taskName);
-    console.log(dueDate);
+    addNewTask(taskName, dueDate, columnId);
     setTaskName("");
     setDueDate("");
   }

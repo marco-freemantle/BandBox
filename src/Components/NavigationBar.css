@@ -67,5 +67,6 @@
 @media (max-width: 1500px) {
   .sidebar-main {
     position: fixed;
+    z-index: 3;
   }
 }

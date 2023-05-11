@@ -1,34 +1,19 @@
+import UseAnimations from "react-useanimations";
 import "./Tasks.css";
 import NavigationBar from "../../Components/NavigationBar";
 import CreateTask from "./Modals/CreateTask";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import BandCreation from "../../Components/NewAccount/BandCreation";
+import * as utilities from "../../Utilities/FireStoreUtilities";
+import trash2 from "react-useanimations/lib/trash2";
 
-const itemsFromBackend = [
-  { id: uuidv4(), content: "First Task" },
-  { id: uuidv4(), content: "Second Task" },
-  { id: uuidv4(), content: "Third Task" },
-  { id: uuidv4(), content: "Fourth Task" },
-  { id: uuidv4(), content: "Fifth Task" },
-  { id: uuidv4(), content: "First Task" },
-  { id: uuidv4(), content: "Second Task" },
-  { id: uuidv4(), content: "Third Task" },
-  { id: uuidv4(), content: "Fourth Task" },
-  { id: uuidv4(), content: "Fifth Task" },
-  { id: uuidv4(), content: "First Task" },
-  { id: uuidv4(), content: "Second Task" },
-  { id: uuidv4(), content: "Third Task" },
-  { id: uuidv4(), content: "Fourth Task" },
-  { id: uuidv4(), content: "Fifth Task" },
-];
-
-const columnsFromBackend = {
+const taskColumns = {
   [uuidv4()]: {
     name: "Ideas",
-    items: itemsFromBackend,
+    items: [],
   },
   [uuidv4()]: {
     name: "To do",
@@ -81,8 +66,24 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function Tasks(props) {
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columns, setColumns] = useState();
   const [modalShow, setModalShow] = useState(false);
+  const [modalToAddTo, setModalToAddTo] = useState("");
+
+  //When band data has loaded, populate columns with backend data
+  useEffect(() => {
+    if (!columns) {
+      populateColumns();
+    }
+    // eslint-disable-next-line
+  }, [props.band]);
+
+  //Only update backend if columns have been set locally
+  useEffect(() => {
+    if (columns) {
+      utilities.updateTaskList(props.bandId, columns);
+    }
+  }, [columns, props.bandId]);
 
   if (props.user.bands === undefined) return;
   if (props.user.bands.length === 0) {
@@ -94,6 +95,53 @@ function Tasks(props) {
       />
     );
   }
+
+  function populateColumns() {
+    if (props.band) {
+      for (const [key, value] of Object.entries(props.band.tasks)) {
+        for (const [, items] of Object.entries(taskColumns)) {
+          if (items.name === key) {
+            items.items = value.items;
+          }
+        }
+      }
+      setColumns(taskColumns);
+    }
+  }
+
+  function addNewTask(taskName, dueDate, columnId) {
+    //Format date
+    const dateparts = dueDate.split("-");
+    const formattedDate = `${dateparts[2]}/${dateparts[1]}/${dateparts[0]}`;
+
+    const newTask = {
+      id: uuidv4(),
+      content: taskName,
+      date: formattedDate,
+    };
+
+    let columnsCopy = { ...columns };
+
+    columnsCopy[columnId].items.push(newTask);
+    setColumns(columnsCopy);
+  }
+
+  function removeTask(columnId, taskId) {
+    const column = columns[columnId];
+    const copiedItems = [...column.items];
+    const newItems = copiedItems.filter((item) => item.id !== taskId);
+    console.log(newItems);
+
+    setColumns({
+      ...columns,
+      [columnId]: {
+        ...column,
+        items: newItems,
+      },
+    });
+  }
+
+  if (!columns) return;
 
   return (
     <div className="tasks-page">
@@ -133,14 +181,13 @@ function Tasks(props) {
                           background: "none",
                           boxShadow: "none",
                         }}
-                        onClick={() => setModalShow(true)}
+                        onClick={() => {
+                          setModalShow(true);
+                          setModalToAddTo(id);
+                        }}
                       >
                         <FaPlus size={20} />
                       </button>
-                      <CreateTask
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
                     </div>
 
                     <Droppable droppableId={id} key={id}>
@@ -171,16 +218,39 @@ function Tasks(props) {
                                         {...provided.dragHandleProps}
                                         style={{
                                           userSelect: "none",
-                                          padding: 16,
+                                          padding: 10,
                                           backgroundColor: snapshot.isDragging
                                             ? "#263B4A"
                                             : "#456C86",
                                           color: "white",
+                                          display: "flex",
+                                          justifyContent: "space-between",
                                           ...provided.draggableProps.style,
                                         }}
                                         className="task-item"
                                       >
-                                        {item.content}
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                          }}
+                                        >
+                                          <p className="item-content">
+                                            {item.content}
+                                          </p>
+                                          <p className="item-date">
+                                            {item.date}
+                                          </p>
+                                        </div>
+                                        <UseAnimations
+                                          size={26}
+                                          animation={trash2}
+                                          strokeColor="white"
+                                          className="delete-icon"
+                                          onClick={() =>
+                                            removeTask(id, item.id)
+                                          }
+                                        />
                                       </div>
                                     );
                                   }}
@@ -196,6 +266,12 @@ function Tasks(props) {
                 </div>
               );
             })}
+            <CreateTask
+              show={modalShow}
+              onHide={() => setModalShow(false)}
+              columnId={modalToAddTo}
+              addNewTask={addNewTask}
+            />
           </DragDropContext>
         </div>
       </div>

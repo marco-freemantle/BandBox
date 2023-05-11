@@ -180,7 +180,11 @@ function Members(props) {
   } else {
     return (
       <div className="members-page">
-        <NavigationBar />
+        <NavigationBar
+          user={props.user}
+          selectedBand={props.bandId}
+          setSelectedBand={props.setSelectedBand}
+        />
 
         <div className="members-main-content">
           <MembersMobile band={props.band} />

@@ -7,26 +7,22 @@ function Events() {
       <h2>Events</h2>
       <div className="events-overview">
         <EventInstance
-          title={"Go and buy a new guitar!"}
+          title={"Amy's wedding!"}
           date={"10/12/2023"}
           amount={"£1050.99"}
+        />
+        <EventInstance
+          title={"Band rehearsal!"}
+          date={"10/12/2023"}
+          amount={"£0.00"}
+        />
+        <EventInstance
+          title={"Go and buy a new guitar"}
+          date={"10/12/2023"}
+          amount={"£599.99"}
         />
         <EventInstance
           title={"Go and buy a new guitar!"}
-          date={"10/12/2023"}
-          amount={"£1050.99"}
-        />
-        <EventInstance
-          title={
-            "Go and buy a new guitar Go and buy a new guitarGo and buy a new guitar!"
-          }
-          date={"10/12/2023"}
-          amount={"£1050.99"}
-        />
-        <EventInstance
-          title={
-            "Go and buy a new guitar Go and buy a new guitarGo and buy a new guitar!"
-          }
           date={"10/12/2023"}
           amount={"£1050.99"}
         />
