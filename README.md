@@ -16,7 +16,7 @@ BandBox is a software application designed to help music bands manage their fina
 
 If you wish to run BandBox locally, follow these steps:
 
-- Close the repository to your local machine.
+- Clone the repository to your local machine.
 - Install the necessary dependencies by running:
 
 ### `npm install`
