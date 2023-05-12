@@ -1,20 +1,37 @@
 import "./SongViewer.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as utilities from "../../../Utilities/FireStoreUtilities";
 
 function SongViewer(props) {
-  const [songName, setSongName] = useState(props.songName);
-  const [artistName, setArtistName] = useState(props.artistName);
-  const [notes, setNotes] = useState(props.notes);
+  const [editedSong, setEditedSong] = useState(null);
 
   const [changesButtonDisabled, setChangesButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    setChangesButtonDisabled(true);
+    setEditedSong(null);
+  }, [props.song]);
 
   function changeDetails(event) {
     event.preventDefault();
 
+    const updatedSong = {
+      artistName: editedSong.artistName,
+      songName: editedSong.songName,
+      notes: editedSong.notes,
+      id: props.song.id,
+    };
+
+    utilities.updateSong(props.bandId, updatedSong, props.setList);
+
     setChangesButtonDisabled(true);
+    setEditedSong(null);
+    props.selectSong(updatedSong);
   }
+
+  if (!props.song) return null;
 
   return (
     <Form onSubmit={changeDetails} id="song-viewer">
@@ -23,11 +40,13 @@ function SongViewer(props) {
         <Form.Control
           type="text"
           onChange={(e) => {
-            setSongName(e.target.value);
+            setEditedSong((prevSong) => ({
+              ...prevSong,
+              songName: e.target.value,
+            }));
             setChangesButtonDisabled(false);
           }}
-          value={songName}
-          required
+          value={editedSong?.songName ?? props.song.songName}
         />
       </Form.Group>
       <Form.Group className="mb-3">
@@ -35,11 +54,13 @@ function SongViewer(props) {
         <Form.Control
           type="text"
           onChange={(e) => {
-            setArtistName(e.target.value);
+            setEditedSong((prevSong) => ({
+              ...prevSong,
+              artistName: e.target.value,
+            }));
             setChangesButtonDisabled(false);
           }}
-          value={artistName}
-          required
+          value={editedSong?.artistName ?? props.song.artistName}
         />
       </Form.Group>
       <Form.Group>
@@ -48,10 +69,13 @@ function SongViewer(props) {
           as="textarea"
           placeholder="Enter notes"
           onChange={(e) => {
-            setNotes(e.target.value);
+            setEditedSong((prevSong) => ({
+              ...prevSong,
+              notes: e.target.value,
+            }));
             setChangesButtonDisabled(false);
           }}
-          value={notes}
+          value={editedSong?.notes ?? props.song.notes}
           className="song-notes-textarea"
         />
       </Form.Group>

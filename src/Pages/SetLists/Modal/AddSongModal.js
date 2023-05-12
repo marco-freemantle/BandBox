@@ -3,14 +3,26 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
+import * as utilities from "../../../Utilities/FireStoreUtilities";
+import { v4 as uuidv4 } from "uuid";
 
-function AddSongModal(props) {
+function AddSongModal({ setList, bandId, ...props }) {
   const [songName, setSongName] = useState("");
   const [artistName, setArtistName] = useState("");
   const [notes, setNotes] = useState("");
 
   function addNewSong(event) {
     event.preventDefault();
+
+    const newSong = {
+      artistName: artistName,
+      songName: songName,
+      notes: notes,
+      id: uuidv4(),
+    };
+
+    utilities.addNewSong(bandId, newSong, setList);
+
     setSongName("");
     setArtistName("");
     setNotes("");

@@ -272,3 +272,72 @@ export async function updateTaskList(_bandId, taskColumns) {
   //Update band task list with new task list
   await updateDoc(bandRef, { tasks: newTaskList });
 }
+
+/**
+ * Adds a new song to a setLis
+ * @param bandId The band to add the new song for
+ * @param newSong The new song object to add
+ * @param setList The setList to add the song to
+ */
+export async function addNewSong(bandId, newSong, setList) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Append new song to song list for a specified set list
+  const newSongList = [...docSnap.data().setLists[setList].songs, newSong];
+
+  //Update user band list with new band list
+  await updateDoc(bandRef, {
+    [`setLists.${setList}.songs`]: newSongList,
+  });
+}
+
+/**
+ * Deletes a song from a setlist
+ * @param bandId The band to delete the new song for
+ * @param song The song object to remove
+ * @param setList The setList to remove the song from
+ */
+export async function deleteSong(bandId, song, setList) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Retrieve the existing song list for the specified set list
+  const existingSongs = docSnap.data().setLists[setList].songs;
+
+  //Remove the song from the song list
+  const newSongList = existingSongs.filter((s) => s.id !== song.id);
+
+  //Update the band document with the new song list
+  await updateDoc(bandRef, {
+    [`setLists.${setList}.songs`]: newSongList,
+  });
+}
+
+/**
+ * Updates a songs details
+ * @param bandId The band to update the song details for
+ * @param song The song object to update
+ * @param setList The setList to update the song for
+ */
+export async function updateSong(bandId, song, setList) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Retrieve the existing song list for the specified set list
+  const existingSongs = docSnap.data().setLists[setList].songs;
+
+  //Remove the song from the song list
+  const tempSongList = existingSongs.filter((s) => s.id !== song.id);
+
+  //Add amended song
+  const newSongList = [...tempSongList, song];
+
+  //Update the band document with the new song list
+  await updateDoc(bandRef, {
+    [`setLists.${setList}.songs`]: newSongList,
+  });
+}
