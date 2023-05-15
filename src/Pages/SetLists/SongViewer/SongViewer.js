@@ -31,7 +31,13 @@ function SongViewer(props) {
     props.selectSong(updatedSong);
   }
 
-  if (!props.song) return null;
+  if (!props.song) {
+    return (
+      <div className="no-song-selected">
+        <h3>Select a song!</h3>
+      </div>
+    );
+  }
 
   return (
     <Form onSubmit={changeDetails} id="song-viewer">
@@ -79,9 +85,7 @@ function SongViewer(props) {
           className="song-notes-textarea"
         />
       </Form.Group>
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}
-      >
+      <div className="song-viewer-save-button">
         <Button
           variant="primary"
           type="submit"

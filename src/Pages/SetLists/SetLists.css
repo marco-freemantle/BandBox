@@ -55,6 +55,26 @@
   overflow-y: auto;
 }
 
+.add-song-button-icon {
+  margin-top: -2px;
+  margin-left: 10px;
+}
+
+.song-list-title {
+  margin-bottom: 20px;
+}
+
+.song-viewer-title {
+  margin-bottom: 28px;
+}
+
+.no-songs-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 200px;
+}
+
 @media (max-width: 1780px) {
   .setlist-main-content {
     padding-top: 0%;
@@ -79,7 +99,42 @@
 
   .setlists {
     height: 700px;
-    width: 90%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1005px) {
+  .add-song-button {
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+
+  .add-song-button-icon {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 895px) {
+  .setlists {
+    flex-direction: column;
+  }
+
+  .setlist-list-section {
+    height: 40%;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .song-list-title {
+    margin-bottom: 5px;
+  }
+
+  .song-viewer-title {
+    margin-bottom: 10px;
+  }
+
+  .no-songs-text {
+    margin-top: 50px;
   }
 }
 

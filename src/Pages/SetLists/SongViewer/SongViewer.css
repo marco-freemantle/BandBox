@@ -3,6 +3,19 @@
   max-height: 480px;
 }
 
+.song-viewer-save-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.no-song-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 285px;
+}
+
 @media (max-width: 1780px) {
   .song-notes-textarea {
     max-height: 370px;
@@ -12,5 +25,19 @@
 @media (max-width: 1110px) {
   .song-notes-textarea {
     max-height: 300px;
+  }
+}
+
+@media (max-width: 895px) {
+  .song-notes-textarea {
+    max-height: 100px;
+  }
+
+  .song-viewer-save-button {
+    margin-top: 10px;
+  }
+
+  .no-song-selected {
+    margin-top: 150px;
   }
 }

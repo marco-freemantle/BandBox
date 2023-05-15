@@ -14,3 +14,17 @@
 .song-instance:hover .delete-icon-song {
   visibility: visible;
 }
+
+.song-card-button {
+  border: none;
+  background-color: transparent;
+  min-width: 100%;
+  padding: 0%;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 895px) {
+  .song-instance {
+    padding: 1%;
+  }
+}

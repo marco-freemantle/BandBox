@@ -5,13 +5,7 @@ import trash2 from "react-useanimations/lib/trash2";
 function SongCard(props) {
   return (
     <button
-      style={{
-        border: "none",
-        backgroundColor: "transparent",
-        minWidth: "100%",
-        padding: "0%",
-        marginBottom: "18px",
-      }}
+      className="song-card-button"
       onClick={() => {
         props.selectSong(props.song);
       }}
