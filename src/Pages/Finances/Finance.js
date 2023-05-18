@@ -17,6 +17,7 @@ function Finance(props) {
       />
     );
   }
+
   return (
     <div className="finance-page">
       <NavigationBar
@@ -27,7 +28,7 @@ function Finance(props) {
       <div className="finance-main-content">
         <div className="finance-wrapper">
           <div className="box graph">
-            <FinanceGraph />
+            <FinanceGraph band={props.band} />
           </div>
           <div className="box finance-table">
             <FinanceTable />
@@ -35,10 +36,10 @@ function Finance(props) {
         </div>
         <div className="finance-form-wrapper">
           <div className="box revenue-entry">
-            <RevenueEntryForm />
+            <RevenueEntryForm bandId={props.bandId} />
           </div>
           <div className="box expense-entry">
-            <ExpenseEntryForm />
+            <ExpenseEntryForm bandId={props.bandId} />
           </div>
         </div>
       </div>

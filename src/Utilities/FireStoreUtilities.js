@@ -120,6 +120,21 @@ export async function createBand(_userId, _bandName) {
         items: [],
       },
     },
+    setLists: {
+      "set-list-1": {
+        songs: [],
+      },
+      "set-list-2": {
+        songs: [],
+      },
+      "set-list-3": {
+        songs: [],
+      },
+    },
+    finances: {
+      revenue: [],
+      expenses: [],
+    },
   });
 
   await updateDoc(docRef, { inviteCode: docRef.id });
@@ -339,5 +354,43 @@ export async function updateSong(bandId, song, setList) {
   //Update the band document with the new song list
   await updateDoc(bandRef, {
     [`setLists.${setList}.songs`]: newSongList,
+  });
+}
+
+/**
+ * Adds a new revenue entry to firestore
+ * @param bandId The band to add the revenue for
+ * @param revenueObj The revenue object to add
+ */
+export async function addNewRevenue(bandId, revenueObj) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Append new song to song list for a specified set list
+  const newRevenueList = [...docSnap.data().finances["revenue"], revenueObj];
+
+  //Update user band list with new band list
+  await updateDoc(bandRef, {
+    [`finances.revenue`]: newRevenueList,
+  });
+}
+
+/**
+ * Adds a new expense entry to firestore
+ * @param bandId The band to add the expense for
+ * @param expenseObj The expense object to add
+ */
+export async function addNewExpense(bandId, expenseObj) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Append new song to song list for a specified set list
+  const newExpenseList = [...docSnap.data().finances["expenses"], expenseObj];
+
+  //Update user band list with new band list
+  await updateDoc(bandRef, {
+    [`finances.expenses`]: newExpenseList,
   });
 }
