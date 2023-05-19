@@ -1,13 +1,18 @@
 import "./FinanceGraph.css";
 import { Line } from "react-chartjs-2";
 import DateFilter from "../../Filters/DateFilter";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function FinanceGraph(props) {
   //State that holds month filter
   const [monthFilter, setMonthFilter] = useState("");
   //State that holds year filter
   const [yearFilter, setYearFilter] = useState("2023");
+
+  useEffect(() => {
+    props.setFilters(monthFilter, yearFilter);
+    // eslint-disable-next-line
+  }, [monthFilter, yearFilter]);
 
   function handleChangeMonthFilter(month) {
     setMonthFilter(month);
@@ -131,8 +136,7 @@ function FinanceGraph(props) {
   };
 
   if (props.band) {
-    processEntries(props.band.finances["revenue"]);
-    processEntries(props.band.finances["expenses"]);
+    processEntries(props.band.finances);
   }
 
   let data = [];
@@ -162,10 +166,10 @@ function FinanceGraph(props) {
       //Check if current entry matches the month filter
       if (key === monthFilter.toLowerCase()) {
         value.forEach((entry) => {
-          // Extract the day from the date string
+          //Extract the day from the date string
           let day = parseInt(entry.date.split("/")[0]);
 
-          // Initialize the day's profit if it doesn't exist yet
+          //Initialise the day's profit if it doesn't exist yet
           if (!profits[day - 1]) {
             profits[day - 1] = 0;
           }

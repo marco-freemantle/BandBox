@@ -131,10 +131,7 @@ export async function createBand(_userId, _bandName) {
         songs: [],
       },
     },
-    finances: {
-      revenue: [],
-      expenses: [],
-    },
+    financeEntries: [],
   });
 
   await updateDoc(docRef, { inviteCode: docRef.id });
@@ -368,11 +365,11 @@ export async function addNewRevenue(bandId, revenueObj) {
   const docSnap = await getDoc(bandRef);
 
   //Append new song to song list for a specified set list
-  const newRevenueList = [...docSnap.data().finances["revenue"], revenueObj];
+  const newRevenueList = [...docSnap.data().finances, revenueObj];
 
   //Update user band list with new band list
   await updateDoc(bandRef, {
-    [`finances.revenue`]: newRevenueList,
+    [`finances`]: newRevenueList,
   });
 }
 
@@ -387,10 +384,34 @@ export async function addNewExpense(bandId, expenseObj) {
   const docSnap = await getDoc(bandRef);
 
   //Append new song to song list for a specified set list
-  const newExpenseList = [...docSnap.data().finances["expenses"], expenseObj];
+  const newExpenseList = [...docSnap.data().finances, expenseObj];
 
   //Update user band list with new band list
   await updateDoc(bandRef, {
-    [`finances.expenses`]: newExpenseList,
+    [`finances`]: newExpenseList,
+  });
+}
+
+/**
+ * Deletes a financial entry
+ * @param bandId The band to delete the finance entry for
+ * @param entryId The id of the entry to remove
+ */
+export async function removeFinanceEntry(bandId, entryId) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Retrieve the existing finance entry list
+  const existingEntries = docSnap.data().finances;
+
+  //Remove the entry from the finance list
+  const newEntriesList = existingEntries.filter(
+    (entry) => entry.id !== entryId
+  );
+
+  //Update the band document with the new song list
+  await updateDoc(bandRef, {
+    [`finances`]: newEntriesList,
   });
 }
