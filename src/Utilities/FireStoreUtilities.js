@@ -133,6 +133,7 @@ export async function createBand(_userId, _bandName) {
     },
     finances: [],
     events: [],
+    messages: [],
   });
 
   await updateDoc(docRef, { inviteCode: docRef.id });
@@ -477,5 +478,24 @@ export async function saveEventChanges(bandId, event) {
   //Update the band document with the new song list
   await updateDoc(bandRef, {
     [`events`]: newEventList,
+  });
+}
+
+/**
+ * Sends a message to band gourp chat
+ * @param bandId The band to send message to
+ * @param message The message object to send
+ */
+export async function sendMessage(bandId, message) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Append new message to message list
+  const newMessageList = [...docSnap.data().messages, message];
+
+  //Update band message list with new message list
+  await updateDoc(bandRef, {
+    [`messages`]: newMessageList,
   });
 }
