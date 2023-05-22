@@ -1,14 +1,59 @@
-.mobile-events-container {
+.calendar-view-mobile * {
+  color: black !important;
+  text-decoration: none;
+  min-width: 100%;
+}
+
+.fc-list-event-dot {
+  visibility: hidden;
+}
+
+.fc {
+  height: 90%;
+}
+
+.events-mobile-card {
   background-color: #ffffff;
   border-color: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border-radius: 20px;
   padding: 2%;
-  height: 100%;
-  width: 90%;
 }
 
-.mobile-events-scrollbox {
-  max-height: 550px;
-  overflow-y: auto;
+@media (max-width: 1093px) {
+  .calendar-view-mobile * {
+    background-color: aliceblue;
+  }
+}
+
+@media (max-width: 790px) {
+  .calendar-view-mobile * {
+    color: black !important;
+    text-decoration: none;
+    max-height: 680px;
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .fc-header-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fc-toolbar-chunk {
+    margin-bottom: 5px;
+  }
+
+  .events-title {
+    text-align: center;
+    font-size: 35px;
+    margin-bottom: 30px;
+  }
+
+  .fc {
+    height: 88%;
+  }
 }

@@ -13,19 +13,23 @@ function Events(props) {
   });
 
   const handleResize = () => {
-    if (window.innerWidth < 791) {
+    if (window.innerWidth < 1093) {
       setIsDeviceSmall(true);
     } else {
       setIsDeviceSmall(false);
     }
   };
 
-  const mobileEvents = <MobileEvents />;
+  const mobileEvents = (
+    <div className="events-wrapper">
+      <MobileEvents bandId={props.bandId} band={props.band} />
+    </div>
+  );
 
   const desktopEvents = (
     <div className="events-wrapper">
       <div className="box calendar-box">
-        <EventCalendar />
+        <EventCalendar bandId={props.bandId} band={props.band} />
       </div>
     </div>
   );

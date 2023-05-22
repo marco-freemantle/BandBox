@@ -131,7 +131,8 @@ export async function createBand(_userId, _bandName) {
         songs: [],
       },
     },
-    financeEntries: [],
+    finances: [],
+    events: [],
   });
 
   await updateDoc(docRef, { inviteCode: docRef.id });
@@ -364,10 +365,8 @@ export async function addNewRevenue(bandId, revenueObj) {
   const bandRef = doc(getFirestore(), "bands", bandId);
   const docSnap = await getDoc(bandRef);
 
-  //Append new song to song list for a specified set list
   const newRevenueList = [...docSnap.data().finances, revenueObj];
 
-  //Update user band list with new band list
   await updateDoc(bandRef, {
     [`finances`]: newRevenueList,
   });
@@ -383,10 +382,9 @@ export async function addNewExpense(bandId, expenseObj) {
   const bandRef = doc(getFirestore(), "bands", bandId);
   const docSnap = await getDoc(bandRef);
 
-  //Append new song to song list for a specified set list
+  //Append new expense to existing expense list
   const newExpenseList = [...docSnap.data().finances, expenseObj];
 
-  //Update user band list with new band list
   await updateDoc(bandRef, {
     [`finances`]: newExpenseList,
   });
@@ -410,8 +408,74 @@ export async function removeFinanceEntry(bandId, entryId) {
     (entry) => entry.id !== entryId
   );
 
-  //Update the band document with the new song list
+  //Update the band document with the new finances list
   await updateDoc(bandRef, {
     [`finances`]: newEntriesList,
+  });
+}
+
+/**
+ * Adds a new band event to Firestore
+ * @param bandId The band to add the event for
+ * @param newEvent The event object to add
+ */
+export async function createNewEvent(bandId, newEvent) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Append new event to events list
+  const newEventList = [...docSnap.data().events, newEvent];
+
+  //Update band event list with new event list
+  await updateDoc(bandRef, {
+    [`events`]: newEventList,
+  });
+}
+
+/**
+ * Deletes an event
+ * @param bandId The band to delete the event entry for
+ * @param entryId The id of the entry to remove
+ */
+export async function deleteEvent(bandId, entryId) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Retrieve the existing event list
+  const existingEvents = docSnap.data().events;
+
+  //Remove the entry from the event list
+  const newEventsList = existingEvents.filter((event) => event.id !== entryId);
+
+  //Update the band document with the new finances list
+  await updateDoc(bandRef, {
+    [`events`]: newEventsList,
+  });
+}
+
+/**
+ * Updates an events details
+ * @param bandId The band to update the event for
+ * @param event The event object to update
+ */
+export async function saveEventChanges(bandId, event) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docSnap = await getDoc(bandRef);
+
+  //Retrieve the existing event list
+  const existingEvents = docSnap.data().events;
+
+  //Remove the event from the song list
+  const tempEventList = existingEvents.filter((e) => e.id !== event.id);
+
+  //Add amended event
+  const newEventList = [...tempEventList, event];
+
+  //Update the band document with the new song list
+  await updateDoc(bandRef, {
+    [`events`]: newEventList,
   });
 }

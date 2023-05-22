@@ -1,69 +1,106 @@
 import "./MobileEvents.css";
-import Form from "react-bootstrap/Form";
-import MobileEventCard from "./MobileEventCard";
+import React, { useState, useEffect } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import listPlugin from "@fullcalendar/list";
+import CreateEventModal from "../Calendar/CreateEventModal";
+import EditEventModal from "../Calendar/EditEventModal";
 
-const eventData = [
-  {
-    eventName: "Wedding",
-    amount: "£1500",
-    address: "281 Lidgett Lane",
-    date: "12/06/2023",
-    time: "12pm",
-    notes: "No notes here!",
-  },
-  {
-    eventName: "Wedding",
-    amount: "£1500",
-    address: "281 Lidgett Lane",
-    date: "12/06/2023",
-    time: "12pm",
-    notes: "No notes here!",
-  },
-];
+function MobileEvents(props) {
+  const [modalShow, setModalShow] = useState(false);
+  const [editModalShow, setEditModalShow] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [selectedEventId, setSelectedEventId] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState("");
 
-function MobileEvents() {
+  let tempEvents = [];
+
+  //When band data has loaded, populate events array
+  useEffect(() => {
+    if (props.band) {
+      props.band.events.forEach((event) => {
+        event["start"] = new Date(event.start);
+        tempEvents.push(event);
+      });
+
+      setEvents(tempEvents);
+    }
+    // eslint-disable-next-line
+  }, [props.band]);
+
+  //When an event has been selected
+  useEffect(() => {
+    //Get data of selected event
+    setSelectedEvent(events.find((event) => event["id"] === selectedEventId));
+
+    // eslint-disable-next-line
+  }, [selectedEventId]);
+
   return (
-    <div className="mobile-events-container">
-      <h1>Events</h1>
-      <div style={{ display: "flex" }}>
-        <Form.Select size="sm">
-          <option value="January">January</option>
-          <option value="February">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-          <option value="May">May</option>
-          <option value="June">June</option>
-          <option value="July">July</option>
-          <option value="August">August</option>
-          <option value="September">September</option>
-          <option value="October">October</option>
-          <option value="November">November</option>
-          <option value="December">December</option>
-        </Form.Select>
-        <Form.Select size="sm">
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-        </Form.Select>
-      </div>
-      <hr />
-      <div className="mobile-events-scrollbox">
-        {eventData.map((event) => {
-          return (
-            <MobileEventCard
-              eventName={event.eventName}
-              amount={event.amount}
-              address={event.address}
-              date={event.date}
-              time={event.time}
-              notes={event.notes}
-            />
-          );
-        })}
-      </div>
+    <div style={{ overflowY: "visible" }} className="events-mobile-card">
+      <h1 className="events-title">Events</h1>
+      <FullCalendar
+        plugins={[dayGridPlugin, listPlugin]}
+        initialView="listMonth"
+        weekends={true}
+        events={events}
+        eventContent={renderEventContent}
+        eventClassNames="calendar-event"
+        viewClassNames="calendar-view-mobile"
+        customButtons={{
+          customButton: {
+            text: "Add New Event",
+            click: function () {
+              setModalShow(true);
+            },
+          },
+        }}
+        headerToolbar={{
+          start: "title",
+          center: "",
+          end: "customButton prev,next",
+        }}
+      />
+      <CreateEventModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        bandId={props.bandId}
+      />
+      <EditEventModal
+        show={editModalShow}
+        onHide={() => setEditModalShow(false)}
+        bandId={props.bandId}
+        event={selectedEvent}
+      />
     </div>
   );
+
+  function renderEventContent(eventInfo) {
+    return (
+      <div>
+        <button
+          style={{
+            borderRadius: "4px",
+            color: "#333",
+            background: "#2ecc71",
+            transition: "background 0.3s",
+            border: "none",
+            padding: "2px 16px",
+            cursor: "pointer",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+          onClick={() => {
+            setSelectedEventId(eventInfo.event._def.publicId);
+            setEditModalShow(true);
+          }}
+        >
+          <div style={{ textAlign: "start", background: "#2ecc71" }}>
+            {eventInfo.event.title}
+          </div>
+        </button>
+      </div>
+    );
+  }
 }
 
 export default MobileEvents;

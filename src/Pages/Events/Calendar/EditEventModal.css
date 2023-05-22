@@ -1,0 +1,15 @@
+.edit-event-modal-button {
+  width: 250px;
+}
+
+@media (max-width: 992px) {
+  .edit-event-modal-button {
+    max-width: 175px;
+  }
+}
+
+@media (max-width: 400px) {
+  .edit-event-modal-button {
+    max-width: 150px;
+  }
+}

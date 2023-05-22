@@ -1,11 +1,12 @@
+import "./EditEventModal.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useState } from "react";
+import { useEffect } from "react";
 import * as utilities from "../../../Utilities/FireStoreUtilities";
-import { v4 as uuidv4 } from "uuid";
 
-function CreateEventModal({ bandId, ...props }) {
+function EditEventModal({ bandId, event, ...props }) {
   const [eventName, setEventName] = useState("");
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
@@ -13,9 +14,45 @@ function CreateEventModal({ bandId, ...props }) {
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
 
-  function createEvent(event) {
-    event.preventDefault();
+  useEffect(() => {
+    if (!event) return;
+    let date = event.start;
 
+    //Extract date components
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based
+    const year = date.getFullYear();
+
+    //Format date as 'yyyy-MM-dd'
+    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
+      .toString()
+      .padStart(2, "0")}`;
+
+    //Extract time components
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    //Format time as 'hh:mm'
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
+
+    setEventName(event.title);
+    setAmount(event.amount);
+    setAddress(event.address);
+    setNotes(event.notes);
+    setDate(formattedDate);
+    setTime(formattedTime);
+
+    // eslint-disable-next-line
+  }, [event]);
+
+  function deleteEvent() {
+    utilities.deleteEvent(bandId, event.id);
+    props.onHide(true);
+  }
+
+  function saveChanges() {
     // Extracting date components
     var dateComponents = date.split("-");
     var year = parseInt(dateComponents[0]);
@@ -33,28 +70,21 @@ function CreateEventModal({ bandId, ...props }) {
       address: address,
       start: new Date(year, month, day, hour, minute).toString(),
       notes: notes,
-      id: uuidv4(),
+      id: event.id,
     };
 
-    utilities.createNewEvent(bandId, newEvent);
-
-    setEventName("");
-    setAmount("");
-    setAddress("");
-    setDate("");
-    setTime("");
-    setNotes("");
+    utilities.saveEventChanges(bandId, newEvent);
   }
 
   return (
     <Modal {...props} size="lg" centered backdropClassName="custom-backdrop">
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <h3>Create an Event</h3>
+          <h3>Edit Event</h3>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form autoComplete="off" onSubmit={createEvent}>
+        <Form autoComplete="off">
           <Form.Group className="create-event-form-field">
             <Form.Label>Event Name</Form.Label>
             <Form.Control
@@ -123,13 +153,20 @@ function CreateEventModal({ bandId, ...props }) {
             />
           </Form.Group>
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
             <Button
-              variant="primary"
-              type="submit"
-              style={{ minWidth: "250px" }}
+              variant="danger"
+              onClick={deleteEvent}
+              className="edit-event-modal-button"
             >
-              Add New Event
+              Delete Event
+            </Button>
+            <Button
+              variant="success"
+              onClick={saveChanges}
+              className="edit-event-modal-button"
+            >
+              Save Changes
             </Button>
           </div>
         </Form>
@@ -138,4 +175,4 @@ function CreateEventModal({ bandId, ...props }) {
   );
 }
 
-export default CreateEventModal;
+export default EditEventModal;
