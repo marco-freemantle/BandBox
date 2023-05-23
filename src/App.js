@@ -82,6 +82,7 @@ function App() {
         setIsLoading(false);
       }
     });
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

@@ -60,6 +60,8 @@
   }
 
   .finance-overview-wrapper {
-    height: 160px;
+    height: 100%;
+    align-items: center;
+    display: flex;
   }
 }

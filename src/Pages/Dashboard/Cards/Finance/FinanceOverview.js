@@ -12,7 +12,7 @@ import {
 import FinanceOverviewMobile from "./FinanceOverviewMobile";
 import { useEffect, useState } from "react";
 
-function FinanceOverview() {
+function FinanceOverview(props) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function FinanceOverview() {
   });
 
   const handleResize = () => {
-    if (window.innerWidth < 770) {
+    if (window.innerWidth < 940) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
@@ -30,7 +30,7 @@ function FinanceOverview() {
   const textCentreRev = {
     id: "textCentre",
     beforeDatasetsDraw(chart, args, pluginOptions) {
-      const { ctx, data } = chart;
+      const { ctx } = chart;
 
       ctx.save();
       ctx.font = "bolder 20px sans-serif";
@@ -48,7 +48,7 @@ function FinanceOverview() {
   const textCentreExp = {
     id: "textCentre",
     beforeDatasetsDraw(chart, args, pluginOptions) {
-      const { ctx, data } = chart;
+      const { ctx } = chart;
 
       ctx.save();
       ctx.font = "bolder 20px sans-serif";
@@ -86,11 +86,19 @@ function FinanceOverview() {
 
   //Data passed to the revenue doughnut
   const data_revenue = {
-    labels: ["Revenue", "Expenditure", "asd", "56", "dfgin"],
+    labels: ["Events", "Merch", "Other"],
     datasets: [
       {
-        data: [20000, 11354, 12965, 34568],
-        backgroundColor: ["rgba(255, 99, 132, 1)", "rgba(255, 99, 132, 0.25)"],
+        data: [
+          props.financeBreakdown.Events,
+          props.financeBreakdown.Merch,
+          props.financeBreakdown.revOther,
+        ],
+        backgroundColor: [
+          "rgba(153, 102, 255, 0.6)",
+          "rgba(41, 128, 185, 0.6)",
+          "rgba(46, 204, 113, 0.6)",
+        ],
         borderColor: ["rgba(255, 99, 132, 0.5)"],
         borderWidth: 0,
         cutout: "65%",
@@ -100,11 +108,19 @@ function FinanceOverview() {
 
   //Data passed to the expenses doughnut
   const data_expenses = {
-    labels: ["Revenue", "Expenditure"],
+    labels: ["Travel", "Wages", "Other"],
     datasets: [
       {
-        data: [1275, 2490],
-        backgroundColor: ["rgba(255, 99, 132, 1)", "rgba(255, 99, 132, 0.25)"],
+        data: [
+          props.financeBreakdown.Travel,
+          props.financeBreakdown.Wages,
+          props.financeBreakdown.expOther,
+        ],
+        backgroundColor: [
+          "rgba(249, 105, 14, 0.5)",
+          "rgba(22, 160, 133, 0.5)",
+          "rgba(220, 53, 69, 0.6)",
+        ],
         borderColor: ["rgba(255, 99, 132, 0.5)"],
         borderWidth: 0,
         cutout: "60%",
@@ -114,7 +130,7 @@ function FinanceOverview() {
 
   if (!isMobile) {
     return (
-      <div>
+      <div style={{ height: "100%" }}>
         <h2 style={{ marginBottom: "50px" }}>Financial Overview - 30 Days</h2>
         <div className="finance-overview-wrapper">
           <div className="main-doughnuts-container">
@@ -130,22 +146,22 @@ function FinanceOverview() {
                   <FaMusic size={20} />
                   <h4 className="stat-title">Events</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.Events}</p>
                 <div style={{ display: "flex" }}>
                   <FaTshirt size={20} />
                   <h4 className="stat-title">Merch</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.Merch}</p>
                 <div style={{ display: "flex" }}>
                   <FaHandsHelping size={20} />
                   <h4 className="stat-title">Other</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.revOther}</p>
               </div>
             </div>
             <div className="doughnut-container">
               <Doughnut
-                data={data_revenue}
+                data={data_expenses}
                 options={options}
                 plugins={[textCentreExp]}
               />
@@ -154,26 +170,25 @@ function FinanceOverview() {
                   <FaShuttleVan size={20} />
                   <h4 className="stat-title">Travel</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.Travel}</p>
                 <div style={{ display: "flex" }}>
                   <FaGuitar size={20} />
                   <h4 className="stat-title">Wages</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.Wages}</p>
                 <div style={{ display: "flex" }}>
                   <FaMoneyBillWaveAlt size={20} />
                   <h4 className="stat-title">Other</h4>
                 </div>
-                <p className="stat-value">£3097.76</p>
+                <p className="stat-value">£{props.financeBreakdown.expOther}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="overview-stats"></div>
       </div>
     );
   } else {
-    return <FinanceOverviewMobile />;
+    return <FinanceOverviewMobile financeBreakdown={props.financeBreakdown} />;
   }
 }
 
