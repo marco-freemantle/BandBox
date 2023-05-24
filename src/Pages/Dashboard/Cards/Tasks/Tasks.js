@@ -1,26 +1,22 @@
 import "./Tasks.css";
 import TaskInstance from "./TaskInstance";
+import { v4 as uuidv4 } from "uuid";
 
-function Tasks() {
+function Tasks(props) {
+  if (!props.band) return;
   return (
     <div style={{ padding: "2%" }}>
       <h2>Tasks</h2>
       <div className="todos-overview">
-        <TaskInstance title={"Create new setlist!"} date={"10/12/2023"} />
-        <TaskInstance title={"Buy a new guitar!"} date={"10/12/2023"} />
-        <TaskInstance title={"Send contract to Amy!"} date={"10/12/2023"} />
-        <TaskInstance
-          title={"Promote band on social media!"}
-          date={"10/12/2023"}
-        />
-        <TaskInstance
-          title={"Pay band members on Friday!"}
-          date={"10/12/2023"}
-        />
-        <TaskInstance
-          title={"Learn new Elton John song!"}
-          date={"10/12/2023"}
-        />
+        {props.band.tasks["To do"].items.map((item) => {
+          return (
+            <TaskInstance
+              title={item.content}
+              date={item.date}
+              key={uuidv4()}
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -31,12 +31,6 @@
   margin-top: 20px;
 }
 
-.menu-bottom {
-  position: fixed;
-  bottom: 0;
-  width: 13%;
-}
-
 .link {
   text-decoration: none;
   color: white;

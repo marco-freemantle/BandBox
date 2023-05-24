@@ -125,7 +125,6 @@ function NavigationBar(props) {
           </div>
 
           {!collapsed && workspaceDropDown}
-
           <MenuItem
             icon={<FaHome size={"25px"} />}
             className="menu-item"
@@ -175,7 +174,6 @@ function NavigationBar(props) {
           >
             Members
           </MenuItem>
-
           <MenuItem icon={<FaCog size={"25px"} />} className="menu-item">
             Settings
           </MenuItem>
