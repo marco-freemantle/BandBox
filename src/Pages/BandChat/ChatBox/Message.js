@@ -2,8 +2,6 @@ import "./Message.css";
 import { getAuth } from "firebase/auth";
 
 function Message(props) {
-  const auth = getAuth();
-
   if (props.senderId === getAuth().currentUser.uid) {
     return (
       <div className="sentBubble">

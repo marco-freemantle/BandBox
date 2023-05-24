@@ -23,6 +23,7 @@ function BandChat(props) {
       let scrollBox = document.getElementById("chat-box");
       scrollBox.scrollTop = 10000000;
     }
+    // eslint-disable-next-line
   }, [messageList]);
 
   if (props.user.bands === undefined) return;
