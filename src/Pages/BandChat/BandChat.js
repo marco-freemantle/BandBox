@@ -41,6 +41,8 @@ function BandChat(props) {
     event.preventDefault();
     const auth = getAuth();
 
+    if (typedMessage.length === 0) return;
+
     const message = {
       senderId: auth.currentUser.uid,
       author: auth.currentUser.displayName,

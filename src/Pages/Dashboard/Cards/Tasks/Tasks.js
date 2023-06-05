@@ -17,6 +17,9 @@ function Tasks(props) {
             />
           );
         })}
+        {props.band.tasks["To do"].items.length === 0 && (
+          <h4 className="no-tasks-text">You have no upcoming tasks</h4>
+        )}
       </div>
     </div>
   );

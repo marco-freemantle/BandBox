@@ -7,6 +7,12 @@
   margin-top: 10px;
 }
 
+.no-tasks-text {
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 @media (max-width: 1500px) {
   .todos-overview {
     display: flex;

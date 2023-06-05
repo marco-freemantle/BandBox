@@ -63,6 +63,46 @@ function FinanceOverview(props) {
     },
   };
 
+  const emptyDoughnut = {
+    id: "emptyDoughnut",
+    afterDraw(chart, args, options) {
+      const { datasets } = chart.data;
+      const { color, width, radiusDecrease } = options;
+      let hasData = false;
+      let count = 0;
+
+      for (let i = 0; i < datasets.length; i += 1) {
+        const dataset = datasets[i];
+        console.log(dataset.data);
+        for (let j = 0; j < 3; j++) {
+          if (dataset.data[j] === 0) {
+            count++;
+          }
+        }
+      }
+      console.log(count);
+      if (count !== 3) {
+        hasData = true;
+      }
+
+      if (!hasData) {
+        const {
+          chartArea: { left, top, right, bottom },
+          ctx,
+        } = chart;
+        const centerX = (left + right) / 2;
+        const centerY = (top + bottom) / 2;
+        const r = Math.min(right - left, bottom - top) / 2;
+
+        ctx.beginPath();
+        ctx.lineWidth = width || 2;
+        ctx.strokeStyle = color || "rgba(255, 128, 0, 0.5)";
+        ctx.arc(centerX, centerY, r - radiusDecrease || 0, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+    },
+  };
+
   //Graph options
   const options = {
     responsive: true,
@@ -75,6 +115,11 @@ function FinanceOverview(props) {
       },
       textCentreRev,
       textCentreExp,
+      emptyDoughnut: {
+        color: "rgba(48, 66, 86, 0.8)",
+        width: 10,
+        radiusDecrease: 20,
+      },
     },
     maintainAspectRatio: false,
     layout: {
@@ -138,7 +183,7 @@ function FinanceOverview(props) {
               <Doughnut
                 data={data_revenue}
                 options={options}
-                plugins={[textCentreRev]}
+                plugins={[textCentreRev, emptyDoughnut]}
               />
 
               <div className="revenue-stats">
@@ -163,7 +208,7 @@ function FinanceOverview(props) {
               <Doughnut
                 data={data_expenses}
                 options={options}
-                plugins={[textCentreExp]}
+                plugins={[textCentreExp, emptyDoughnut]}
               />
               <div className="revenue-stats">
                 <div style={{ display: "flex" }}>

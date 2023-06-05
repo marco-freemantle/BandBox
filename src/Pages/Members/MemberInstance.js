@@ -12,22 +12,6 @@ function MemberInstance(props) {
         />
       </td>
       <td>
-        <Form.Control
-          type="text"
-          placeholder="Role"
-          value={props.member.role}
-          onChange={() => {}}
-        />
-      </td>
-      <td>
-        <Form.Control
-          type="text"
-          placeholder="Instrument"
-          value={props.member.instrument}
-          onChange={() => {}}
-        />
-      </td>
-      <td>
         <Dropdown>
           <Dropdown.Toggle id="dropdown-basic">Permissions</Dropdown.Toggle>
 
@@ -73,7 +57,7 @@ function MemberInstance(props) {
         </Dropdown>
       </td>
       <td>
-        <Button variant="danger">Remove</Button>
+        <Button variant="danger">Remove Member</Button>
       </td>
     </tr>
   );

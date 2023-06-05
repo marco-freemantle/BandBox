@@ -25,6 +25,9 @@ function Events(props) {
             />
           );
         })}
+        {filteredEvents.length === 0 && (
+          <h4 className="no-tasks-text">You have no upcoming events</h4>
+        )}
       </div>
     </div>
   );

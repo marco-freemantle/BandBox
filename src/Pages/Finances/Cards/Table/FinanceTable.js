@@ -110,38 +110,45 @@ function FinanceTable(props) {
   });
 
   return (
-    <Table striped responsive>
-      <thead>
-        <tr>
-          <th>Revenue/Expense</th>
-          <th>Name</th>
-          <th>Amount</th>
-          <th>Type</th>
-          <th>Notes</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry) => (
-          <tr key={uuidv4()}>
-            <td>{entry["rev/exp"]}</td>
-            <td>{entry.name}</td>
-            <td>{entry.amount}</td>
-            <td>{entry.type}</td>
-            <td>{entry.notes}</td>
-            <td>
-              {entry.date}
-              {
-                <CloseButton
-                  style={{ float: "right" }}
-                  onClick={() => removeEntry(entry.id)}
-                />
-              }
-            </td>
+    <>
+      <Table striped responsive>
+        <thead>
+          <tr>
+            <th>Revenue/Expense</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Notes</th>
+            <th>Date</th>
           </tr>
-        ))}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {data.map((entry) => (
+            <tr key={uuidv4()}>
+              <td>{entry["rev/exp"]}</td>
+              <td>{entry.name}</td>
+              <td>{entry.amount}</td>
+              <td>{entry.type}</td>
+              <td>{entry.notes}</td>
+              <td>
+                {entry.date}
+                {
+                  <CloseButton
+                    style={{ float: "right" }}
+                    onClick={() => removeEntry(entry.id)}
+                  />
+                }
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {data.length === 0 && (
+        <h4 style={{ textAlign: "center", marginTop: "90px" }}>
+          No financial data
+        </h4>
+      )}
+    </>
   );
 }
 

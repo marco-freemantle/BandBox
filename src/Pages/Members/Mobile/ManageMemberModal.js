@@ -28,26 +28,6 @@ function ManageMemberModal(props) {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="instrument">
-            <Form.Label>Instrument</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter instrument"
-              onChange={() => {}}
-              value={props.member.instrument}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="role">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter instrument"
-              onChange={() => {}}
-              value={props.member.role}
-            />
-          </Form.Group>
-
           <Form.Group className="mb-3" controlId="permissions">
             <Form.Label>Permissions</Form.Label>
             <Form.Check
