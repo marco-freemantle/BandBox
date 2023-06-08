@@ -5,7 +5,9 @@ import FinanceOverview from "./Cards/Finance/FinanceOverview";
 import ProfitStrip from "./Cards/ProfitStrip/ProfitStrip";
 import Tasks from "./Cards/Tasks/Tasks";
 import Events from "./Cards/Events/Events";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 import { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
 
 function Dashboard(props) {
   const [isDeviceSmall, setIsDeviceSmall] = useState(false);
@@ -34,6 +36,20 @@ function Dashboard(props) {
   }
 
   if (!props.band) return;
+
+  //Checks if the current user has valid permissions to view this page
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["dashboard"] === false) {
+    return (
+      <InvalidPermissions
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
 
   //Get last 30 days of finances
   const thirtyDaysAgo = new Date();

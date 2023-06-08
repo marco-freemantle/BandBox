@@ -3,6 +3,8 @@ import NavigationBar from "../../Components/NavigationBar";
 import EventCalendar from "./Calendar/EventCalendar";
 import MobileEvents from "./Mobile/MobileEvents";
 import BandCreation from "../../Components/NewAccount/BandCreation";
+import { getAuth } from "firebase/auth";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 import { useState, useEffect } from "react";
 
 function Events(props) {
@@ -40,6 +42,21 @@ function Events(props) {
   if (props.user.bands.length === 0) {
     return (
       <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
+
+  //Checks if the current user has valid permissions to view this page
+  if (!props.band) return;
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["events"] === false) {
+    return (
+      <InvalidPermissions
         user={props.user}
         selectedBand={props.bandId}
         setSelectedBand={props.setSelectedBand}

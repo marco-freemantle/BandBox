@@ -15,6 +15,7 @@ function JoinRequestModal(props) {
     events: false,
     finances: false,
     setLists: false,
+    members: false,
   });
 
   if (!props.member) return;
@@ -31,6 +32,7 @@ function JoinRequestModal(props) {
       events: false,
       finances: false,
       setLists: false,
+      members: false,
     });
 
     props.onHide();
@@ -70,26 +72,6 @@ function JoinRequestModal(props) {
               placeholder="Enter name"
               onChange={() => {}}
               value={props.member.fullName}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="fullName">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter role"
-              onChange={(e) => {
-                setRole(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="fullName">
-            <Form.Label>Instrument</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter instrument"
-              onChange={(e) => {
-                setInstrument(e.target.value);
-              }}
             />
           </Form.Group>
 
@@ -158,6 +140,17 @@ function JoinRequestModal(props) {
                 setPermissions({
                   ...permissions,
                   setLists: e.target.checked,
+                });
+              }}
+            />
+            <Form.Check
+              type="checkbox"
+              label={"Members"}
+              style={{ marginBottom: "5px" }}
+              onChange={(e) => {
+                setPermissions({
+                  ...permissions,
+                  members: e.target.checked,
                 });
               }}
             />

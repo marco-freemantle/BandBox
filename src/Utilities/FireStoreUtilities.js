@@ -92,8 +92,6 @@ export async function createBand(_userId, _bandName) {
       {
         fullName: auth.currentUser.displayName,
         userId: auth.currentUser.uid,
-        role: "Leader",
-        instrument: "",
         permissions: {
           dashboard: true,
           bandChat: true,
@@ -101,6 +99,7 @@ export async function createBand(_userId, _bandName) {
           events: true,
           finances: true,
           setLists: true,
+          members: true,
         },
       },
     ],
@@ -497,5 +496,109 @@ export async function sendMessage(bandId, message) {
   //Update band message list with new message list
   await updateDoc(bandRef, {
     [`messages`]: newMessageList,
+  });
+}
+
+/**
+ * Updates permissions for a given user
+ * @param bandId The band to update the permissions for
+ * @param userId The user to update the permissions for
+ * @param permissions The new permissions object
+ */
+export async function changeUserPermissions(bandId, userId, permissions) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const bandSnapshot = await getDoc(bandRef);
+
+  //Retrieve the members array from the band document
+  const members = bandSnapshot.data().members;
+
+  //Find the member with the matching userId
+  const matchingMember = members.find((member) => member.userId === userId);
+
+  if (matchingMember) {
+    //Update the permissions property:
+    matchingMember.permissions = permissions;
+
+    //Update the band document with the modified members array
+    await updateDoc(bandRef, { members });
+  }
+}
+
+/**
+ * removes a band member from the band
+ * @param bandId The band to remove the member for
+ * @param userId The user to remove
+ */
+export async function removeBandMember(bandId, userId) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const bandSnapshot = await getDoc(bandRef);
+
+  //Retrieve the members array from the band document
+  const members = bandSnapshot.data().members;
+
+  //Find the index of the member with the matching userId
+  const matchingIndex = members.findIndex((member) => member.userId === userId);
+
+  if (matchingIndex !== -1) {
+    //Remove the matching member from the members array
+    members.splice(matchingIndex, 1);
+
+    //Update the band document with the modified members array
+    await updateDoc(bandRef, { members });
+
+    //Remove band from user document
+    //Reference to user document
+    const userRef = doc(getFirestore(), "users", userId);
+    const docSnap = await getDoc(userRef);
+
+    //Retrieve the bands array from the user document
+    const bands = docSnap.data().bands;
+
+    //Find the index of the member with the matching userId
+    const matchingBandIndex = bands.findIndex((band) => band.bandId === bandId);
+
+    if (matchingBandIndex !== -1) {
+      //Remove the matching member from the bands array
+      bands.splice(matchingBandIndex, 1);
+
+      //Update the user document with the modified bands array
+      await updateDoc(userRef, { bands });
+    }
+  }
+}
+
+/**
+ * Changes display name for given user
+ * @param userId The user to change name for
+ * @param displayName The new name
+ */
+export async function changeUserName(userId, displayName) {
+  //Reference to user document
+  const userRef = doc(getFirestore(), "users", userId);
+  const docSnap = await getDoc(userRef);
+
+  //List of all bands this user is a part of
+  const bands = docSnap.data().bands;
+
+  //For each band, update the current users full name
+  bands.forEach(async (band) => {
+    const bandRef = doc(getFirestore(), "bands", band.bandId);
+    const bandSnapshot = await getDoc(bandRef);
+
+    //Retrieve the members array from the band document
+    const members = bandSnapshot.data().members;
+
+    //Find the member with the matching userId
+    const matchingMember = members.find((member) => member.userId === userId);
+
+    if (matchingMember) {
+      //Update the name property:
+      matchingMember.fullName = displayName;
+
+      //Update the band document with the modified members array
+      await updateDoc(bandRef, { members });
+    }
   });
 }

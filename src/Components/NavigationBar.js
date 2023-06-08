@@ -174,7 +174,11 @@ function NavigationBar(props) {
           >
             Members
           </MenuItem>
-          <MenuItem icon={<FaCog size={"25px"} />} className="menu-item">
+          <MenuItem
+            icon={<FaCog size={"25px"} />}
+            className="menu-item"
+            component={<Link to="/settings" />}
+          >
             Settings
           </MenuItem>
           <MenuItem

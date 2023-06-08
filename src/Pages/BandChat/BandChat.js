@@ -7,6 +7,7 @@ import Message from "./ChatBox/Message";
 import * as utilities from "../../Utilities/FireStoreUtilities";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 
 function BandChat(props) {
   const [typedMessage, setTypedMessage] = useState("");
@@ -21,7 +22,9 @@ function BandChat(props) {
   useEffect(() => {
     if (props.band && messageList) {
       let scrollBox = document.getElementById("chat-box");
-      scrollBox.scrollTop = 10000000;
+      if (scrollBox) {
+        scrollBox.scrollTop = 10000000;
+      }
     }
     // eslint-disable-next-line
   }, [messageList]);
@@ -30,6 +33,21 @@ function BandChat(props) {
   if (props.user.bands.length === 0) {
     return (
       <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
+
+  //Checks if the current user has valid permissions to view this page
+  if (!props.band) return;
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["bandChat"] === false) {
+    return (
+      <InvalidPermissions
         user={props.user}
         selectedBand={props.bandId}
         setSelectedBand={props.setSelectedBand}

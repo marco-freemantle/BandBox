@@ -16,6 +16,7 @@ import SetLists from "./Pages/SetLists/SetLists";
 import Signup from "./Pages/Signup/Signup";
 import Tasks from "./Pages/Tasks/Tasks";
 import Loading from "./Components/Loading/Loading";
+import Settings from "./Pages/Settings/Settings";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCbx3bBl0D0qR4I5M4h3KKqkIVNyFmn-OM",
@@ -174,6 +175,17 @@ function App() {
           path="/tasks"
           element={
             <Tasks
+              user={currentUser}
+              band={currentBand}
+              bandId={currentBandId}
+              setSelectedBand={setBand}
+            />
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Settings
               user={currentUser}
               band={currentBand}
               bandId={currentBandId}

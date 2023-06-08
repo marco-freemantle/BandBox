@@ -73,14 +73,12 @@ function FinanceOverview(props) {
 
       for (let i = 0; i < datasets.length; i += 1) {
         const dataset = datasets[i];
-        console.log(dataset.data);
         for (let j = 0; j < 3; j++) {
           if (dataset.data[j] === 0) {
             count++;
           }
         }
       }
-      console.log(count);
       if (count !== 3) {
         hasData = true;
       }

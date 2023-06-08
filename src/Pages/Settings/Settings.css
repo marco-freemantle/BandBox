@@ -1,0 +1,15 @@
+.settings-card {
+  width: 35%;
+  height: 65%;
+  padding: 1%;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: auto;
+}

@@ -11,14 +11,15 @@ import Image from "react-bootstrap/Image";
 import questionMark from "../../../Images/questionMark.png";
 
 function MembersMobile(props) {
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShowManage, setModalShowManage] = useState(false);
+  const [modalShowRequest, setModalShowRequest] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
 
   const [selectedJoinRequest, setSelectedJoinRequest] = useState();
 
   const handleManageClick = (member) => {
     setSelectedMember(member);
-    setModalShow(true);
+    setModalShowManage(true);
   };
 
   return (
@@ -66,7 +67,7 @@ function MembersMobile(props) {
                     className="join-request-button"
                     onClick={() => {
                       setSelectedJoinRequest(user);
-                      setModalShow(true);
+                      setModalShowRequest(true);
                     }}
                   >
                     {user.fullName}
@@ -77,8 +78,8 @@ function MembersMobile(props) {
             })}
           </Dropdown.Menu>
           <JoinRequestModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
+            show={modalShowRequest}
+            onHide={() => setModalShowRequest(false)}
             member={selectedJoinRequest}
             band={props.band}
           />
@@ -114,9 +115,10 @@ function MembersMobile(props) {
       </Table>
       {selectedMember && (
         <ManageMemberModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
+          show={modalShowManage}
+          onHide={() => setModalShowManage(false)}
           member={selectedMember}
+          band={props.band}
         />
       )}
     </div>

@@ -9,6 +9,8 @@ import { FaPlus } from "react-icons/fa";
 import BandCreation from "../../Components/NewAccount/BandCreation";
 import * as utilities from "../../Utilities/FireStoreUtilities";
 import trash2 from "react-useanimations/lib/trash2";
+import { getAuth } from "firebase/auth";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 
 const taskColumns = {
   [uuidv4()]: {
@@ -89,6 +91,21 @@ function Tasks(props) {
   if (props.user.bands.length === 0) {
     return (
       <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
+
+  //Checks if the current user has valid permissions to view this page
+  if (!props.band) return;
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["tasks"] === false) {
+    return (
+      <InvalidPermissions
         user={props.user}
         selectedBand={props.bandId}
         setSelectedBand={props.setSelectedBand}

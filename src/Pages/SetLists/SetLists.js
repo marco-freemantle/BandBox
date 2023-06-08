@@ -8,6 +8,8 @@ import AddSongModal from "./Modal/AddSongModal";
 import SongViewer from "./SongViewer/SongViewer";
 import BandCreation from "../../Components/NewAccount/BandCreation";
 import { v4 as uuidv4 } from "uuid";
+import { getAuth } from "firebase/auth";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 import * as utilities from "../../Utilities/FireStoreUtilities";
 
 function SetLists(props) {
@@ -35,6 +37,21 @@ function SetLists(props) {
   if (props.user.bands.length === 0) {
     return (
       <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
+
+  //Checks if the current user has valid permissions to view this page
+  if (!props.band) return;
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["setLists"] === false) {
+    return (
+      <InvalidPermissions
         user={props.user}
         selectedBand={props.bandId}
         setSelectedBand={props.setSelectedBand}

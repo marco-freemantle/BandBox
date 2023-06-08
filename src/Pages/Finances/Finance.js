@@ -5,6 +5,8 @@ import RevenueEntryForm from "./Cards/Forms/RevenueEntryForm";
 import ExpenseEntryForm from "./Cards/Forms/ExpenseEntryForm";
 import FinanceTable from "./Cards/Table/FinanceTable";
 import BandCreation from "../../Components/NewAccount/BandCreation";
+import { getAuth } from "firebase/auth";
+import InvalidPermissions from "../../Components/InvalidPermissions/InvalidPermissions";
 import { useState } from "react";
 
 function Finance(props) {
@@ -17,6 +19,21 @@ function Finance(props) {
   if (props.user.bands.length === 0) {
     return (
       <BandCreation
+        user={props.user}
+        selectedBand={props.bandId}
+        setSelectedBand={props.setSelectedBand}
+      />
+    );
+  }
+
+  //Checks if the current user has valid permissions to view this page
+  if (!props.band) return;
+  const currentBandMember = props.band.members.find(
+    (member) => member.userId === getAuth().currentUser.uid
+  );
+  if (currentBandMember.permissions["finances"] === false) {
+    return (
+      <InvalidPermissions
         user={props.user}
         selectedBand={props.bandId}
         setSelectedBand={props.setSelectedBand}
