@@ -8,6 +8,7 @@ import {
   collection,
   updateDoc,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 /**
@@ -600,5 +601,74 @@ export async function changeUserName(userId, displayName) {
       //Update the band document with the modified members array
       await updateDoc(bandRef, { members });
     }
+  });
+}
+
+/**
+ * Deletes a band
+ * @param bandId The band to delete
+ */
+export async function deleteBand(bandId) {
+  //Reference to band document
+  const bandRef = doc(getFirestore(), "bands", bandId);
+  const docBandSnap = await getDoc(bandRef);
+
+  const members = docBandSnap.data().members;
+  //For each member in the band, remove their reference to the band being deleted
+  members.forEach(async (member) => {
+    const userRef = doc(getFirestore(), "users", member.userId);
+    const docSnap = await getDoc(userRef);
+
+    const bands = docSnap.data().bands;
+    //Find the index of the band with the matching bandId
+    const matchingBandIndex = bands.findIndex((band) => band.bandId === bandId);
+
+    if (matchingBandIndex !== -1) {
+      //Remove the matching band from the bands array
+      bands.splice(matchingBandIndex, 1);
+
+      //Update the user document with the modified bands array
+      await updateDoc(userRef, { bands });
+    }
+  });
+
+  //Delete the band document
+  await deleteDoc(bandRef);
+}
+
+/**
+ * Deletes a user
+ * @param userId The user to delete
+ */
+export async function deleteUser(userId) {
+  //Reference to user document
+  const userRef = doc(getFirestore(), "users", userId);
+  const docSnap = await getDoc(userRef);
+
+  const bands = docSnap.data().bands;
+  bands.forEach(async (band) => {
+    //Reference to band document
+    const bandRef = doc(getFirestore(), "bands", band.bandId);
+    const docBandSnap = await getDoc(bandRef);
+
+    const members = docBandSnap.data().members;
+
+    //Find the index of the band with the matching bandId
+    const matchingMemberIndex = members.findIndex(
+      (member) => member.userId === userId
+    );
+
+    if (matchingMemberIndex !== -1) {
+      //Remove the matching user from the members array
+      members.splice(matchingMemberIndex, 1);
+
+      //Update the band document with the modified members array
+      await updateDoc(bandRef, { members });
+    }
+  });
+
+  deleteDoc(doc(getFirestore(), "users", userId)).then(() => {
+    getAuth().currentUser.delete();
+    window.location = "signup";
   });
 }

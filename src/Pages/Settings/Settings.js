@@ -27,7 +27,12 @@ function Settings(props) {
 
   //State for band delete
   const [selectedBand, setSelectedBand] = useState("");
-  const [deleteNoti, setDeleteNoti] = useState("");
+  const [deleteBandNoti, setDeleteBandNoti] = useState("");
+
+  //State for account delete
+  const [accPassword, setAccPassword] = useState("");
+  const [accEmail, setAccEmail] = useState("");
+  const [deleteUserNoti, setDeleteUserNoti] = useState("");
 
   function changeName() {
     setNameChangeDisabled(true);
@@ -85,13 +90,73 @@ function Settings(props) {
   }
 
   function deleteBand() {
-    console.log(selectedBand);
+    props.user.bands.forEach((band) => {
+      if (band.bandName === selectedBand) {
+        if (props.band.ownerId !== auth.currentUser.uid) {
+          setDeleteBandNoti(
+            <p
+              style={{
+                marginBottom: "0px",
+                marginTop: "20px",
+                color: "red",
+              }}
+            >
+              Cannot delete a band you do not own
+            </p>
+          );
+        } else {
+          utilities.deleteBand(props.bandId).then(() => {
+            setDeleteBandNoti(
+              <p
+                style={{
+                  marginBottom: "0px",
+                  marginTop: "20px",
+                  color: "green",
+                }}
+              >
+                Band successfully deleted
+              </p>
+            );
+          });
+        }
+      } else {
+        setDeleteBandNoti(
+          <p
+            style={{
+              marginBottom: "0px",
+              marginTop: "20px",
+              color: "red",
+            }}
+          >
+            Band does not exist
+          </p>
+        );
+      }
+    });
+  }
 
-    //
+  function deleteUser() {
+    signInWithEmailAndPassword(auth, accEmail, accPassword)
+      .then(() => {
+        utilities.deleteUser(auth.currentUser.uid);
+      })
+      .catch((error) => {
+        setDeleteUserNoti(
+          <p
+            style={{
+              marginBottom: "0px",
+              marginTop: "20px",
+              color: "red",
+            }}
+          >
+            {error.message}
+          </p>
+        );
+      });
   }
 
   return (
-    <div style={{ display: "flex", backgroundColor: "#f3f3f5" }}>
+    <div className="settings-main-content">
       <NavigationBar
         user={props.user}
         selectedBand={props.bandId}
@@ -123,7 +188,7 @@ function Settings(props) {
         <div style={{ marginBottom: "30px" }}>
           <h4>Change Password</h4>
           <Form>
-            <Form.Group className="mb-3" controlId="password">
+            <Form.Group className="mb-3" controlId="email-for-password">
               <Form.Label>Email address</Form.Label>
               <Form.Control
                 type="text"
@@ -133,10 +198,10 @@ function Settings(props) {
                 }}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="password">
+            <Form.Group className="mb-3" controlId="old-password">
               <Form.Label>Old Password</Form.Label>
               <Form.Control
-                type="text"
+                type="password"
                 placeholder="Enter old password"
                 onChange={(e) => {
                   setOldPass(e.target.value);
@@ -144,10 +209,10 @@ function Settings(props) {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="password">
+            <Form.Group className="mb-3" controlId="new-password">
               <Form.Label>New password</Form.Label>
               <Form.Control
-                type="text"
+                type="password"
                 placeholder="Enter new password"
                 onChange={(e) => {
                   setPassChangeDisabled(false);
@@ -164,7 +229,7 @@ function Settings(props) {
         <div style={{ marginBottom: "30px" }}>
           <h4>Delete Band</h4>
           <Form.Group className="mb-3" controlId="band">
-            <Form.Label>Enter Band Name</Form.Label>
+            <Form.Label>Enter Band Name (Case sensitive)</Form.Label>
             <Form.Control
               type="text"
               placeholder="Type band name you wish to delete"
@@ -176,10 +241,31 @@ function Settings(props) {
           <Button variant="danger" onClick={deleteBand}>
             Delete Band
           </Button>
-          {deleteNoti && <>{deleteNoti}</>}
+          {deleteBandNoti && <>{deleteBandNoti}</>}
         </div>
         <div>
           <h4>Delete Account</h4>
+          <Form onSubmit={deleteUser}>
+            <Form.Label>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              onChange={(e) => setAccEmail(e.target.value)}
+              placeholder={"Enter your email"}
+              id="email"
+            />
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              onChange={(e) => setAccPassword(e.target.value)}
+              placeholder={"Enter your password"}
+              id="password-acc-delete"
+            />
+            <br />
+            <Button variant="danger" onClick={deleteUser}>
+              Delete Account
+            </Button>
+            {deleteUserNoti && <>{deleteUserNoti}</>}
+          </Form>
         </div>
       </div>
     </div>
