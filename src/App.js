@@ -17,6 +17,9 @@ import Signup from "./Pages/Signup/Signup";
 import Tasks from "./Pages/Tasks/Tasks";
 import Loading from "./Components/Loading/Loading";
 import Settings from "./Pages/Settings/Settings";
+import CookieConsent, { resetCookieConsentValue } from "react-cookie-consent";
+import DataCollection from "./Components/DataCollection/DataCollection";
+import { Link } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCbx3bBl0D0qR4I5M4h3KKqkIVNyFmn-OM",
@@ -45,6 +48,9 @@ function App() {
 
   //Is loading state
   const [isLoading, setIsLoading] = useState(true);
+
+  //Forces data collection banner to load on refresh
+  resetCookieConsentValue();
 
   //Firestore auth
   const auth = getAuth();
@@ -104,104 +110,121 @@ function App() {
 
   if (isLoggedIn) {
     return (
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Dashboard
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/bandchat"
-          element={
-            <BandChat
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/events"
-          element={
-            <Events
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/finances"
-          element={
-            <Finance
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/members"
-          element={
-            <Members
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/setlists"
-          element={
-            <SetLists
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/tasks"
-          element={
-            <Tasks
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <Settings
-              user={currentUser}
-              band={currentBand}
-              bandId={currentBandId}
-              setSelectedBand={setBand}
-            />
-          }
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
+      <>
+        <CookieConsent
+          location="bottom"
+          buttonText="Accept"
+          style={{ background: "#6e9acc" }}
+          buttonStyle={{
+            color: "white",
+            fontSize: "16px",
+            backgroundColor: "#4874a7",
+          }}
+        >
+          BandBox collects user data. Please read our{" "}
+          <Link to="/user-data">privacy policy</Link> to find out more!
+        </CookieConsent>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Dashboard
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/bandchat"
+            element={
+              <BandChat
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/events"
+            element={
+              <Events
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/finances"
+            element={
+              <Finance
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/members"
+            element={
+              <Members
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/setlists"
+            element={
+              <SetLists
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <Tasks
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <Settings
+                user={currentUser}
+                band={currentBand}
+                bandId={currentBandId}
+                setSelectedBand={setBand}
+              />
+            }
+          />
+          <Route path="/user-data" element={<DataCollection />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </>
     );
   } else {
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/user-data" element={<DataCollection />} />
         {/**Redirect user to login page if trying to access resitricted content */}
         <Route path="/" element={<Login />} />
         <Route path="/bandchat" element={<Login />} />

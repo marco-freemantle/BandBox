@@ -97,7 +97,6 @@ function Login() {
           {loginError && (
             <p className="error-message-login">Incorrect email or password</p>
           )}
-
           <br />
           {isDeviceSmall && (
             <Link to="/signup">
@@ -107,6 +106,9 @@ function Login() {
             </Link>
           )}
         </Form>
+        <Link to="/user-data" style={{ marginBottom: "50px" }}>
+          Read our privacy policy
+        </Link>
       </div>
       {!isDeviceSmall && (
         <div className="sidebar-signup">

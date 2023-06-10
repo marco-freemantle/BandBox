@@ -1,0 +1,11 @@
+.privacy-policy {
+  max-width: 55%;
+  margin: auto;
+  background-color: #f3f3f5;
+}
+
+.privacy-policy-main-content {
+  background-color: #f3f3f5;
+  height: 100vh;
+  padding: 2%;
+}
